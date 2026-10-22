@@ -1,14 +1,13 @@
-import { ExperienceModel } from '../models/experience.model.js';
+import { AccommodationModel } from '../models/accommodation.model.js';
 import { handleServiceError } from '../utils/service-error.js';
 
 const isSlugDuplicateError = error =>
   error.code === 11000 && (error.keyPattern?.slug || error.keyValue?.slug);
 
-export class ExperienceRepository {
+export class AccommodationRepository {
   async findAll() {
     try {
-      const experiences = await ExperienceModel.find({ deletedAt: null }).sort({ createdAt: -1 });
-      return experiences;
+      return await AccommodationModel.find({ deletedAt: null }).sort({ createdAt: -1 });
     } catch (error) {
       throw handleServiceError(error);
     }
@@ -16,8 +15,7 @@ export class ExperienceRepository {
 
   async findDeleted() {
     try {
-      const experiences = await ExperienceModel.find({ deletedAt: { $ne: null } }).sort({ deletedAt: -1 });
-      return experiences;
+      return await AccommodationModel.find({ deletedAt: { $ne: null } }).sort({ deletedAt: -1 });
     } catch (error) {
       throw handleServiceError(error);
     }
@@ -25,8 +23,7 @@ export class ExperienceRepository {
 
   async findById(id) {
     try {
-      const experience = await ExperienceModel.findOne({ _id: id, deletedAt: null });
-      return experience;
+      return await AccommodationModel.findOne({ _id: id, deletedAt: null });
     } catch (error) {
       throw handleServiceError(error);
     }
@@ -34,8 +31,7 @@ export class ExperienceRepository {
 
   async findBySlug(slug) {
     try {
-      const experience = await ExperienceModel.findOne({ slug, deletedAt: null });
-      return experience;
+      return await AccommodationModel.findOne({ slug, deletedAt: null });
     } catch (error) {
       throw handleServiceError(error);
     }
@@ -43,12 +39,11 @@ export class ExperienceRepository {
 
   async create(data) {
     try {
-      const { slug, deletedAt, isActive, status, ...experienceData } = data;
+      const { slug, deletedAt, isActive, status, ...accommodationData } = data;
 
       for (let attempt = 0; attempt < 10; attempt += 1) {
         try {
-          const experience = await ExperienceModel.create(experienceData);
-          return experience;
+          return await AccommodationModel.create(accommodationData);
         } catch (error) {
           if (!isSlugDuplicateError(error)) {
             throw error;
@@ -56,7 +51,7 @@ export class ExperienceRepository {
         }
       }
 
-      throw new Error('No se pudo generar un slug único para la experiencia.');
+      throw new Error('No se pudo generar un slug único para el alojamiento.');
     } catch (error) {
       throw handleServiceError(error);
     }
@@ -64,19 +59,18 @@ export class ExperienceRepository {
 
   async update(id, data) {
     try {
-      const { slug, deletedAt, isActive, status, ...experienceData } = data;
-      const experience = await this.findById(id);
+      const { slug, deletedAt, isActive, status, ...accommodationData } = data;
+      const accommodation = await this.findById(id);
 
-      if (!experience) {
+      if (!accommodation) {
         return null;
       }
 
-      experience.set(experienceData);
+      accommodation.set(accommodationData);
 
       for (let attempt = 0; attempt < 10; attempt += 1) {
         try {
-          const updatedExperience = await experience.save();
-          return updatedExperience;
+          return await accommodation.save();
         } catch (error) {
           if (!isSlugDuplicateError(error)) {
             throw error;
@@ -84,7 +78,7 @@ export class ExperienceRepository {
         }
       }
 
-      throw new Error('No se pudo generar un slug único para la experiencia.');
+      throw new Error('No se pudo generar un slug único para el alojamiento.');
     } catch (error) {
       throw handleServiceError(error);
     }
@@ -92,12 +86,11 @@ export class ExperienceRepository {
 
   async softDelete(id) {
     try {
-      const deletedExperience = await ExperienceModel.findOneAndUpdate(
+      return await AccommodationModel.findOneAndUpdate(
         { _id: id, deletedAt: null },
         { $set: { deletedAt: new Date() } },
         { new: true }
       );
-      return deletedExperience;
     } catch (error) {
       throw handleServiceError(error);
     }
@@ -105,12 +98,11 @@ export class ExperienceRepository {
 
   async changeIsActive(id, isActive) {
     try {
-      const updatedExperience = await ExperienceModel.findOneAndUpdate(
+      return await AccommodationModel.findOneAndUpdate(
         { _id: id, deletedAt: null },
         { $set: { isActive } },
         { new: true, runValidators: true }
       );
-      return updatedExperience;
     } catch (error) {
       throw handleServiceError(error);
     }
@@ -118,12 +110,11 @@ export class ExperienceRepository {
 
   async changeStatus(id, status) {
     try {
-      const updatedExperience = await ExperienceModel.findOneAndUpdate(
+      return await AccommodationModel.findOneAndUpdate(
         { _id: id, deletedAt: null },
         { $set: { status } },
         { new: true, runValidators: true }
       );
-      return updatedExperience;
     } catch (error) {
       throw handleServiceError(error);
     }
@@ -131,12 +122,11 @@ export class ExperienceRepository {
 
   async restoreDelete(id) {
     try {
-      const restoredExperience = await ExperienceModel.findOneAndUpdate(
+      return await AccommodationModel.findOneAndUpdate(
         { _id: id, deletedAt: { $ne: null } },
         { $set: { deletedAt: null } },
         { new: true }
       );
-      return restoredExperience;
     } catch (error) {
       throw handleServiceError(error);
     }

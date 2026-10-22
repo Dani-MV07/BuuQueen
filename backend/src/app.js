@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { connectDB } from './config/db.js';
-import experienceRoutes from './routes/experience.routes.js';
+import accommodationRoutes from './routes/accommodation.routes.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { serveSwagger, setupSwagger } from './config/swagger.js';
 
@@ -22,7 +22,7 @@ app.use(express.json());
 
 app.use('/api-docs', serveSwagger, setupSwagger);
 
-app.use('/api/experiences', experienceRoutes);
+app.use('/api/accommodations', accommodationRoutes);
 
 app.use(errorHandler);
 

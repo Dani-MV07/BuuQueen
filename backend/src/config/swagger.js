@@ -3,9 +3,9 @@ import swaggerUi from 'swagger-ui-express';
 const swaggerDocument = {
   openapi: '3.0.0',
   info: {
-    title: 'Booking Experiences API',
+    title: 'Booking Accommodations API',
     version: '1.0.0',
-    description: 'API REST para la gestión de experiencias de viaje'
+    description: 'API REST para la gestión de alojamientos'
   },
   servers: [
     {
@@ -14,74 +14,74 @@ const swaggerDocument = {
     }
   ],
   paths: {
-    '/experiences': {
+    '/accommodations': {
       get: {
-        summary: 'Obtener todas las experiencias',
+        summary: 'Obtener todos los alojamientos',
         responses: {
-          '200': { description: 'Lista de experiencias devuelta con éxito.' }
+          '200': { description: 'Lista de alojamientos devuelta con éxito.' }
         }
       },
       post: {
-        summary: 'Crear una nueva experiencia',
+        summary: 'Crear un nuevo alojamiento',
         requestBody: {
           required: true,
           content: {
             'application/json': {
-              schema: { $ref: '#/components/schemas/ExperienceInput' }
+              schema: { $ref: '#/components/schemas/AccommodationInput' }
             }
           }
         },
         responses: {
-          '201': { description: 'Experiencia creada exitosamente.' },
+          '201': { description: 'Alojamiento creado exitosamente.' },
           '400': { description: 'Datos de entrada no válidos.' }
         }
       }
     },
-    '/experiences/{id}': {
+    '/accommodations/{id}': {
       get: {
-        summary: 'Obtener una experiencia por ID',
+        summary: 'Obtener un alojamiento por ID',
         parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
         responses: {
-          '200': { description: 'Detalles de la experiencia.' },
-          '404': { description: 'Experiencia no encontrada.' }
+          '200': { description: 'Detalles del alojamiento.' },
+          '404': { description: 'Alojamiento no encontrado.' }
         }
       },
       patch: {
-        summary: 'Actualizar una experiencia',
+        summary: 'Actualizar un alojamiento',
         parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
         requestBody: {
           required: true,
           content: {
             'application/json': {
-              schema: { $ref: '#/components/schemas/ExperienceInput' }
+              schema: { $ref: '#/components/schemas/AccommodationInput' }
             }
           }
         },
         responses: {
-          '200': { description: 'Experiencia actualizada.' },
-          '404': { description: 'Experiencia no encontrada.' }
+          '200': { description: 'Alojamiento actualizado.' },
+          '404': { description: 'Alojamiento no encontrado.' }
         }
       },
       delete: {
-        summary: 'Eliminar una experiencia',
+        summary: 'Eliminar un alojamiento',
         parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
         responses: {
-          '204': { description: 'Experiencia eliminada con éxito.' },
-          '404': { description: 'Experiencia no encontrada.' }
+          '204': { description: 'Alojamiento eliminado con éxito.' },
+          '404': { description: 'Alojamiento no encontrado.' }
         }
       }
     }
   },
   components: {
     schemas: {
-      ExperienceInput: {
+      AccommodationInput: {
         type: 'object',
-        required: ['title', 'city', 'price'],
+        required: ['title', 'category_id', 'location_id', 'host_id'],
         properties: {
-          title: { type: 'string', example: 'Clase de paella valenciana' },
-          city: { type: 'string', example: 'Valencia' },
-          price: { type: 'number', example: 45 },
-          description: { type: 'string', example: 'Aprende a cocinar paella tradicional con un chef local.' }
+          title: { type: 'string', example: 'Hotel Vista al Mar' },
+          category_id: { type: 'string', example: '65001a000000000000000001' },
+          location_id: { type: 'string', example: '65002b000000000000000001' },
+          host_id: { type: 'string', example: '65009i000000000000000001' }
         }
       }
     }

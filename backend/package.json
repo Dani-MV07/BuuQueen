@@ -1,7 +1,7 @@
 {
-  "name": "booking-experiences-api",
+  "name": "booking-accommodations-api",
   "version": "1.0.0",
-  "description": "API REST para gestión de viajes y experiencias",
+  "description": "API REST para gestión de alojamientos",
   "main": "src/app.js",
   "type": "module",
   "scripts": {

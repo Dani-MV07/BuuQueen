@@ -1,8 +1,7 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const locationSchema = new Schema(
   {
-    _id: { type: String, default: () => new Types.ObjectId().toString() },
     country: { type: String, required: true, trim: true },
     city: { type: String, required: true, trim: true },
     address: { type: String, required: true, trim: true },

@@ -12,9 +12,9 @@ const idParams = z.object({
 });
 
 const accommodationFields = {
-  category_id: z.string().trim().min(1, 'La categoría es obligatoria.'),
-  location_id: z.string().trim().min(1, 'La ubicación es obligatoria.'),
-  host_id: z.string().trim().min(1, 'El anfitrión es obligatorio.')
+  category_id: z.string().regex(/^[a-f\d]{24}$/i, 'El ID de categoría debe ser un ObjectId válido.'),
+  location_id: z.string().regex(/^[a-f\d]{24}$/i, 'El ID de ubicación debe ser un ObjectId válido.'),
+  host_id: z.string().regex(/^[a-f\d]{24}$/i, 'El ID de anfitrión debe ser un ObjectId válido.')
 };
 
 const createSchema = z.object({

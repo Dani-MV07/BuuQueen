@@ -19,7 +19,7 @@ npm install
 
 2. Configurar variables de entorno copiando `.env.example` a `.env`.
 
-3. Cargar el alojamiento inicial:
+3. Cargar los datos iniciales de roles, usuarios, categorías, ubicaciones, anfitriones, alojamientos, variantes e imágenes:
 ```bash
 npm run seed
 ```

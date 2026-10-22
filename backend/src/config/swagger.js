@@ -79,9 +79,9 @@ const swaggerDocument = {
         required: ['title', 'category_id', 'location_id', 'host_id'],
         properties: {
           title: { type: 'string', example: 'Hotel Vista al Mar' },
-          category_id: { type: 'string', example: '65001a000000000000000001' },
-          location_id: { type: 'string', example: '65002b000000000000000001' },
-          host_id: { type: 'string', example: '65009i000000000000000001' }
+          category_id: { type: 'string', format: 'objectId', example: '65001a000000000000000001' },
+          location_id: { type: 'string', format: 'objectId', example: '65002b000000000000000001' },
+          host_id: { type: 'string', format: 'objectId', example: '65009a000000000000000001' }
         }
       }
     }

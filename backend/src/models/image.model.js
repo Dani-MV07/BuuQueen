@@ -1,10 +1,13 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const imageSchema = new Schema(
   {
-    _id: { type: String, default: () => new Types.ObjectId().toString() },
-    entity_type: { type: String, required: true, trim: true },
-    entity_id: { type: String, required: true },
+    entity_type: {
+      type: String,
+      required: true,
+      enum: ['Accommodation', 'Category', 'Host', 'Location', 'Role', 'User', 'Variant']
+    },
+    entity_id: { type: Schema.Types.ObjectId, refPath: 'entity_type', required: true },
     url_image: { type: String, required: true, trim: true },
     slug: { type: String, required: true, unique: true, trim: true },
     status: { type: String, required: true, trim: true, default: 'active' },

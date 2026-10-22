@@ -1,12 +1,8 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import slugify from 'slugify';
 
 const accommodationSchema = new Schema(
   {
-    _id: {
-      type: String,
-      default: () => new Types.ObjectId().toString()
-    },
     title: {
       type: String,
       required: [true, 'El título es obligatorio.'],
@@ -14,17 +10,17 @@ const accommodationSchema = new Schema(
       maxlength: [120, 'Máximo 120 caracteres.']
     },
     category_id: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'Category',
       required: true
     },
     location_id: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'Location',
       required: true
     },
     host_id: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'Host',
       required: true
     },

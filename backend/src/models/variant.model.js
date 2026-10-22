@@ -1,9 +1,8 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const variantSchema = new Schema(
   {
-    _id: { type: String, default: () => new Types.ObjectId().toString() },
-    accommodation_id: { type: String, ref: 'Accommodation', required: true },
+    accommodation_id: { type: Schema.Types.ObjectId, ref: 'Accommodation', required: true },
     sku: { type: String, required: true, unique: true, trim: true },
     price: { type: Number, required: true, min: 0 },
     stock: { type: Number, required: true, min: 0, validate: Number.isInteger },

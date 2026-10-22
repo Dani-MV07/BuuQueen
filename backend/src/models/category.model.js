@@ -1,8 +1,7 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const categorySchema = new Schema(
   {
-    _id: { type: String, default: () => new Types.ObjectId().toString() },
     name: { type: String, required: true, trim: true },
     slug: { type: String, required: true, unique: true, trim: true },
     status: { type: String, required: true, trim: true, default: 'active' },

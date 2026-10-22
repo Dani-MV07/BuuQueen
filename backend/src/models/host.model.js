@@ -1,9 +1,8 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const hostSchema = new Schema(
   {
-    _id: { type: String, default: () => new Types.ObjectId().toString() },
-    user_id: { type: String, ref: 'User', required: true },
+    user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     bio: { type: String, trim: true, default: '' },
     slug: { type: String, required: true, unique: true, trim: true },
     status: { type: String, required: true, trim: true, default: 'active' },

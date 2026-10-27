@@ -31,4 +31,15 @@ npm run dev
 
 ## API
 
-El recurso principal está disponible en `/api/accommodations`. Consulta `postman.md` para los endpoints y `http://localhost:3000/api-docs` para Swagger.
+Los recursos están disponibles en:
+
+- `/api/accommodations`
+- `/api/categories`
+- `/api/hosts`
+- `/api/images`
+- `/api/locations`
+- `/api/roles`
+- `/api/users`
+- `/api/variants`
+
+Cada recurso ofrece listado de activos (`GET /`), listado de eliminados (`GET /deleted`), consulta por slug (`GET /slug/:slug`) o ID (`GET /:id`), creación (`POST /`), actualización (`PATCH /:id`), cambio de estado activo (`PATCH /:id/is-active`), cambio de estado (`PATCH /:id/status`), restauración (`PATCH /:id/restore`) y borrado lógico (`DELETE /:id`). Consulta `postman.md` y `http://localhost:3000/api-docs` para más información.

@@ -12,7 +12,19 @@ const variantSchema = new Schema(
     isActive: { type: Boolean, default: true },
     deletedAt: { type: Date, default: null }
   },
-  { timestamps: true, versionKey: false }
+  {
+    timestamps: true,
+    versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
 );
+
+variantSchema.virtual('images', {
+  ref: 'Image',
+  localField: '_id',
+  foreignField: 'entity_id',
+  match: { entity_type: 'Variant' }
+});
 
 export const VariantModel = model('Variant', variantSchema);

@@ -17,7 +17,24 @@ const locationSchema = new Schema(
     isActive: { type: Boolean, default: true },
     deletedAt: { type: Date, default: null }
   },
-  { timestamps: true, versionKey: false }
+  {
+    timestamps: true,
+    versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
 );
+
+locationSchema.virtual('accommodations', {
+  ref: 'Accommodation',
+  localField: '_id',
+  foreignField: 'location_id'
+});
+locationSchema.virtual('images', {
+  ref: 'Image',
+  localField: '_id',
+  foreignField: 'entity_id',
+  match: { entity_type: 'Location' }
+});
 
 export const LocationModel = model('Location', locationSchema);

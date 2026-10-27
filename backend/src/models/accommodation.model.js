@@ -47,9 +47,23 @@ const accommodationSchema = new Schema(
   },
   {
     timestamps: true,
-    versionKey: false
+    versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
 );
+
+accommodationSchema.virtual('variants', {
+  ref: 'Variant',
+  localField: '_id',
+  foreignField: 'accommodation_id'
+});
+accommodationSchema.virtual('images', {
+  ref: 'Image',
+  localField: '_id',
+  foreignField: 'entity_id',
+  match: { entity_type: 'Accommodation' }
+});
 
 accommodationSchema.pre('validate', async function () {
   if (!this.isNew && !this.isModified('title')) {

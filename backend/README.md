@@ -4,7 +4,7 @@ API REST para la gestión de alojamientos. La API sigue la arquitectura routes �
 
 ## Modelos MongoDB
 
-Los modelos están en `src/models` y representan las colecciones `accommodations`, `categories`, `hosts`, `images`, `locations`, `roles`, `users` y `variants`. Las relaciones usan IDs de tipo string para admitir los identificadores definidos en los JSON del esquema.
+Los modelos están en `src/models` y representan las colecciones `accommodations`, `categories`, `hosts`, `images`, `locations`, `roles`, `users` y `variants`. Las relaciones se almacenan como referencias ObjectId de MongoDB. Los repositorios de `src/repositories` usan `populate` para devolver las relaciones directas e inversas de cada modelo.
 
 ## Requisitos previos
 - Node.js (v18+)

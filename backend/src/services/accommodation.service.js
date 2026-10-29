@@ -1,144 +1,72 @@
-import mongoose from 'mongoose';
-import AppError from '../utils/app-error.js';
 import { AccommodationRepository } from '../repositories/accommodation.repository.js';
 import { CategoryRepository } from '../repositories/category.repository.js';
 import { HostRepository } from '../repositories/host.repository.js';
 import { LocationRepository } from '../repositories/location.repository.js';
+import { ResourceService } from './resource.service.js';
 
-export class AccommodationService {
+export class AccommodationService extends ResourceService {
   constructor() {
-    this.repository = new AccommodationRepository();
-    this.categoryRepository = new CategoryRepository();
-    this.hostRepository = new HostRepository();
-    this.locationRepository = new LocationRepository();
+    super(
+      new AccommodationRepository(),
+      'el alojamiento',
+      {
+        category_id: {
+          repository: new CategoryRepository(),
+          label: 'La categoría asociada',
+          required: true
+        },
+        location_id: {
+          repository: new LocationRepository(),
+          label: 'La ubicación asociada',
+          required: true
+        },
+        host_id: {
+          repository: new HostRepository(),
+          label: 'El anfitrión asociado',
+          required: true
+        }
+      },
+      { slugSource: (data) => data.title, slugFields: ['title'] }
+    );
   }
 
-  async getAllAccommodations() {
-    return this.repository.findAll();
+  async getAllAccommodations(filters) {
+    return this.getAll(filters);
   }
 
   async getDeletedAccommodations() {
-    return this.repository.findDeleted();
+    return this.getDeleted();
   }
 
   async getAccommodationById(id) {
-    this.#validateObjectId(id);
-    const accommodation = await this.repository.findById(id);
-
-    if (!accommodation) {
-      throw new AppError('Alojamiento no encontrado', 404);
-    }
-
-    return accommodation;
+    return this.getById(id);
   }
 
   async getAccommodationBySlug(slug) {
-    const accommodation = await this.repository.findBySlug(slug);
-
-    if (!accommodation) {
-      throw new AppError('Alojamiento no encontrado', 404);
-    }
-
-    return accommodation;
+    return this.getBySlug(slug);
   }
 
   async createAccommodation(data) {
-    await this.#ensureValidRelations(data);
-    return this.repository.create(data);
+    return this.create(data);
   }
 
   async updateAccommodation(id, data) {
-    this.#validateObjectId(id);
-
-    const current = await this.repository.findById(id);
-    if (!current) {
-      throw new AppError('Alojamiento no encontrado', 404);
-    }
-
-    await this.#ensureValidRelations(data);
-
-    const accommodation = await this.repository.update(id, data);
-    if (!accommodation) {
-      throw new AppError('Alojamiento no encontrado', 404);
-    }
-
-    return accommodation;
+    return this.update(id, data);
   }
 
   async changeAccommodationIsActive(id, isActive) {
-    this.#validateObjectId(id);
-    if (typeof isActive !== 'boolean') {
-      throw new AppError('isActive debe ser un valor booleano.', 400);
-    }
-
-    const accommodation = await this.repository.changeIsActive(id, isActive);
-    if (!accommodation) {
-      throw new AppError('Alojamiento no encontrado', 404);
-    }
-
-    return accommodation;
+    return this.changeIsActive(id, isActive);
   }
 
   async changeAccommodationStatus(id, status) {
-    this.#validateObjectId(id);
-    if (typeof status !== 'string' || !status.trim()) {
-      throw new AppError('El estado es obligatorio.', 400);
-    }
-
-    const accommodation = await this.repository.changeStatus(id, status.trim());
-    if (!accommodation) {
-      throw new AppError('Alojamiento no encontrado', 404);
-    }
-
-    return accommodation;
+    return this.changeStatus(id, status);
   }
 
   async softDeleteAccommodation(id) {
-    this.#validateObjectId(id);
-    const accommodation = await this.repository.softDelete(id);
-
-    if (!accommodation) {
-      throw new AppError('Alojamiento no encontrado', 404);
-    }
-
-    return accommodation;
+    return this.softDelete(id);
   }
 
   async restoreDeletedAccommodation(id) {
-    this.#validateObjectId(id);
-    const accommodation = await this.repository.restoreDelete(id);
-
-    if (!accommodation) {
-      throw new AppError('Alojamiento eliminado no encontrado', 404);
-    }
-
-    return accommodation;
-  }
-
-  async #ensureValidRelations(data) {
-    const relations = [
-      ['category_id', this.categoryRepository, 'Categoría asociada no encontrada'],
-      ['location_id', this.locationRepository, 'Ubicación asociada no encontrada'],
-      ['host_id', this.hostRepository, 'Anfitrión asociado no encontrado']
-    ];
-
-    for (const [field, repository, notFoundMessage] of relations) {
-      if (!Object.prototype.hasOwnProperty.call(data, field)) {
-        continue;
-      }
-
-      this.#validateObjectId(data[field], `El campo ${field} debe ser un ObjectId válido.`);
-
-      const relatedDocument = await repository.findById(data[field]);
-      if (!relatedDocument) {
-        throw new AppError(notFoundMessage, 404);
-      }
-    }
-  }
-
-  #validateObjectId(id, message = 'El ID del alojamiento no es válido.') {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new AppError(message, 422);
-    }
+    return this.restoreDelete(id);
   }
 }

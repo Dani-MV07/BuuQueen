@@ -4,6 +4,5 @@ import { createResourceRouter } from './resource.routes.js';
 
 export default createResourceRouter(RoleController, {
   name: z.string().trim().min(1, 'El nombre es obligatorio.'),
-  description: z.string().trim().optional(),
-  slug: z.string().trim().min(1, 'El slug es obligatorio.')
+  description: z.string().trim().optional()
 });

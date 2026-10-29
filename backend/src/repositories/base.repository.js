@@ -15,10 +15,10 @@ export class BaseRepository {
     return document.populate(this.populatePaths);
   }
 
-  async findAll() {
+  async findAll(filter = {}) {
     try {
       return await this.populateQuery(
-        this.model.find({ deletedAt: null }).sort({ createdAt: -1 })
+        this.model.find({ ...filter, deletedAt: null }).sort({ createdAt: -1 })
       );
     } catch (error) {
       throw handleServiceError(error);
@@ -43,9 +43,29 @@ export class BaseRepository {
     }
   }
 
+  async findByIdIncludingDeleted(id) {
+    try {
+      return await this.model.findById(id);
+    } catch (error) {
+      throw handleServiceError(error);
+    }
+  }
+
   async findBySlug(slug) {
     try {
       return await this.populateQuery(this.model.findOne({ slug, deletedAt: null }));
+    } catch (error) {
+      throw handleServiceError(error);
+    }
+  }
+
+  async slugExists(slug, excludeId) {
+    try {
+      const filter = { slug };
+      if (excludeId) {
+        filter._id = { $ne: excludeId };
+      }
+      return Boolean(await this.model.exists(filter));
     } catch (error) {
       throw handleServiceError(error);
     }

@@ -42,4 +42,4 @@ Los recursos están disponibles en:
 - `/api/users`
 - `/api/variants`
 
-Cada recurso ofrece listado de activos (`GET /`), listado de eliminados (`GET /deleted`), consulta por slug (`GET /slug/:slug`) o ID (`GET /:id`), creación (`POST /`), actualización (`PATCH /:id`), cambio de estado activo (`PATCH /:id/is-active`), cambio de estado (`PATCH /:id/status`), restauración (`PATCH /:id/restore`) y borrado lógico (`DELETE /:id`). Consulta `postman.md` y `http://localhost:3000/api-docs` para más información.
+Cada recurso ofrece listado de activos (`GET /`), listado de eliminados (`GET /deleted`), consulta por slug (`GET /slug/:slug`) o ID (`GET /:id`), creación (`POST /`), actualización (`PATCH /:id`), cambio de estado activo (`PATCH /:id/is-active`), cambio de estado (`PATCH /:id/status`), restauración (`PATCH /:id/restore`) y borrado lógico (`DELETE /:id`). Los listados aceptan filtros exactos mediante parámetros de consulta. Los slugs se generan automáticamente a partir de los datos propios de cada recurso. Consulta `postman.md` y `http://localhost:3000/api-docs` para más información.

@@ -5,7 +5,10 @@ import { ResourceService } from './resource.service.js';
 export class UserService extends ResourceService {
   constructor() {
     super(new UserRepository(), 'el usuario', {
-      role_id: { repository: new RoleRepository(), label: 'El rol asociado' }
+      role_id: { repository: new RoleRepository(), label: 'El rol asociado', required: true }
+    }, {
+      slugSource: (data) => data.name,
+      slugFields: ['name']
     });
   }
 }

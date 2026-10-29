@@ -7,7 +7,7 @@ const createHandler = (operation, statusCode = 200) => async (req, res, next) =>
 };
 
 export const createResourceController = service => ({
-  getAll: createHandler(() => service.getAll()),
+  getAll: createHandler(req => service.getAll(req.query)),
   getDeleted: createHandler(() => service.getDeleted()),
   getById: createHandler(req => service.getById(req.params.id)),
   getBySlug: createHandler(req => service.getBySlug(req.params.slug)),

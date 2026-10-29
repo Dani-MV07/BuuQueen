@@ -3,6 +3,9 @@ import { ResourceService } from './resource.service.js';
 
 export class CategoryService extends ResourceService {
   constructor() {
-    super(new CategoryRepository(), 'la categoría');
+    super(new CategoryRepository(), 'la categoría', {}, {
+      slugSource: (data) => data.name,
+      slugFields: ['name']
+    });
   }
 }

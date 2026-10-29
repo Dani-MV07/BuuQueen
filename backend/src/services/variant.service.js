@@ -7,8 +7,12 @@ export class VariantService extends ResourceService {
     super(new VariantRepository(), 'la variante', {
       accommodation_id: {
         repository: new AccommodationRepository(),
-        label: 'El alojamiento asociado'
+        label: 'El alojamiento asociado',
+        required: true
       }
+    }, {
+      slugSource: (data) => data.sku,
+      slugFields: ['sku']
     });
   }
 }

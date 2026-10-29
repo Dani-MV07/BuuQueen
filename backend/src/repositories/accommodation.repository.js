@@ -21,7 +21,7 @@ export class AccommodationRepository extends BaseRepository {
 
   async create(data) {
     try {
-      const { slug, deletedAt, isActive, status, ...accommodationData } = data;
+      const { slug, deletedAt, ...accommodationData } = data;
 
       for (let attempt = 0; attempt < 10; attempt += 1) {
         try {
@@ -42,7 +42,7 @@ export class AccommodationRepository extends BaseRepository {
 
   async update(id, data) {
     try {
-      const { slug, deletedAt, isActive, status, ...accommodationData } = data;
+      const { slug, deletedAt, ...accommodationData } = data;
       const accommodation = await this.findById(id);
 
       if (!accommodation) {

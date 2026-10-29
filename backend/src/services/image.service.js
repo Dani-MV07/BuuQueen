@@ -11,7 +11,14 @@ import { ResourceService } from './resource.service.js';
 
 export class ImageService extends ResourceService {
   constructor() {
-    super(new ImageRepository(), 'la imagen');
+    super(new ImageRepository(), 'la imagen', {}, {
+      slugSource: (data) => {
+        const path = data.url_image.split(/[?#]/, 1)[0];
+        const filename = path.split('/').filter(Boolean).pop() || 'imagen';
+        return `${data.entity_type}-${filename}`;
+      },
+      slugFields: ['entity_type', 'url_image']
+    });
     this.entityRepositories = {
       Accommodation: new AccommodationRepository(),
       Category: new CategoryRepository(),

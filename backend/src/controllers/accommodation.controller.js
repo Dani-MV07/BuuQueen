@@ -5,7 +5,7 @@ const service = new AccommodationService();
 export class AccommodationController {
   static async getAll(req, res, next) {
     try {
-      res.json(await service.getAllAccommodations());
+      res.json(await service.getAllAccommodations(req.query));
     } catch (error) {
       next(error);
     }

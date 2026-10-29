@@ -47,3 +47,15 @@ export const accommodationsApi = {
   remove: (id) => request(`/accommodations/${id}`, { method: 'DELETE' }),
   restore: (id) => request(`/accommodations/${id}/restore`, { method: 'PATCH' })
 };
+
+export const categoriesApi = {
+  list: () => request('/categories')
+};
+
+export const locationsApi = {
+  list: () => request('/locations')
+};
+
+export const hostsApi = {
+  list: () => request('/hosts')
+};

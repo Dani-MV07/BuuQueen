@@ -29,7 +29,7 @@ Puedes cambiarlo en `.env` si la API está en otro host/puerto.
 - Crear: `POST /api/accommodations`
 - Editar: `PATCH /api/accommodations/:id`
 - Eliminar: `DELETE /api/accommodations/:id`
-- Formulario reutilizable de creación y edición validado con Zod.
+- Formulario de alojamientos validado con Zod y selectores de categoría, ubicación y anfitrión cargados desde la API.
 - Tabla de alojamientos, skeletons, gestión de errores y confirmación de acciones.
 - Carga diferida de páginas para dividir el código por rutas.
 - React Router para navegación.
@@ -55,6 +55,9 @@ src/
     index.js
     useAccommodation.js
     useAccommodations.js
+    useCategories.js
+    useLocations.js
+    useHosts.js
   pages/
     AccommodationList.jsx
     AccommodationDetail.jsx
@@ -63,6 +66,9 @@ src/
   services/
     api.js
     accommodationService.js
+    categoryService.js
+    locationService.js
+    hostService.js
   utils/
     SweetAlert.js
     errorHandler.js

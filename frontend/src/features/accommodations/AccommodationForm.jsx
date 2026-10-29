@@ -4,32 +4,37 @@ import { useForm } from 'react-hook-form';
 import { accommodationSchema } from './accommodationSchema';
 
 function toFormValues(values = {}) {
+  const getId = (value) => (
+    value && typeof value === 'object' ? value._id ?? '' : value ?? ''
+  );
+
   return {
     title: values.title ?? '',
-    city: values.city ?? '',
-    price: values.price == null ? '' : String(values.price),
-    description: values.description ?? ''
+    category_id: getId(values.category_id),
+    location_id: getId(values.location_id),
+    host_id: getId(values.host_id)
   };
 }
 
 export default function AccommodationForm({
   initialValues,
+  categories,
+  locations,
+  hosts,
   onSubmit,
   submitLabel = 'Guardar',
-  submitting = false
+  submitting = false,
+  loadingOptions = false
 }) {
   const {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(accommodationSchema),
     defaultValues: toFormValues(initialValues)
   });
-  const description = watch('description') || '';
-
   useEffect(() => {
     reset(toFormValues(initialValues));
   }, [initialValues, reset]);
@@ -43,24 +48,42 @@ export default function AccommodationForm({
           {errors.title && <small className="field-error">{errors.title.message}</small>}
         </label>
         <label>
-          <span>Destino *</span>
-          <input {...register('city')} maxLength={80} placeholder="Valencia" aria-invalid={Boolean(errors.city)} />
-          {errors.city && <small className="field-error">{errors.city.message}</small>}
+          <span>Categoría *</span>
+          <select {...register('category_id')} aria-invalid={Boolean(errors.category_id)} disabled={loadingOptions}>
+            <option value="">Selecciona una categoría</option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>{category.name}</option>
+            ))}
+          </select>
+          {errors.category_id && <small className="field-error">{errors.category_id.message}</small>}
         </label>
         <label>
-          <span>Precio por persona (€) *</span>
-          <input {...register('price')} type="number" min="0" step="any" placeholder="45" aria-invalid={Boolean(errors.price)} />
-          {errors.price && <small className="field-error">{errors.price.message}</small>}
+          <span>Ubicación *</span>
+          <select {...register('location_id')} aria-invalid={Boolean(errors.location_id)} disabled={loadingOptions}>
+            <option value="">Selecciona una ubicación</option>
+            {locations.map((location) => (
+              <option key={location._id} value={location._id}>
+                {[location.city, location.country, location.address].filter(Boolean).join(', ')}
+              </option>
+            ))}
+          </select>
+          {errors.location_id && <small className="field-error">{errors.location_id.message}</small>}
         </label>
-        <label className="full-width">
-          <span>Descripción del alojamiento</span>
-          <textarea {...register('description')} maxLength={500} rows="6" placeholder="Aprende a preparar la auténtica paella valenciana en una huerta local con ingredientes frescos." aria-invalid={Boolean(errors.description)} />
-          <small className="counter">{description.length}/500</small>
-          {errors.description && <small className="field-error">{errors.description.message}</small>}
+        <label>
+          <span>Anfitrión *</span>
+          <select {...register('host_id')} aria-invalid={Boolean(errors.host_id)} disabled={loadingOptions}>
+            <option value="">Selecciona un anfitrión</option>
+            {hosts.map((host) => (
+              <option key={host._id} value={host._id}>
+                {host.user_id?.name || host.bio || host.slug}
+              </option>
+            ))}
+          </select>
+          {errors.host_id && <small className="field-error">{errors.host_id.message}</small>}
         </label>
       </div>
       <div className="form-actions">
-        <button className="button" disabled={submitting}>
+        <button className="button" disabled={submitting || loadingOptions}>
           {submitting ? 'Guardando...' : submitLabel}
         </button>
       </div>

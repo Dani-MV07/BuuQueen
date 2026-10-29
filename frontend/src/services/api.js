@@ -24,26 +24,26 @@ async function request(path, options = {}) {
   return response.json();
 }
 
-export const experiencesApi = {
-  list: () => request('/experiences'),
-  listDeleted: () => request('/experiences/deleted'),
-  get: (id) => request(`/experiences/${id}`),
-  create: (data) => request('/experiences', {
+export const accommodationsApi = {
+  list: () => request('/accommodations'),
+  listDeleted: () => request('/accommodations/deleted'),
+  get: (id) => request(`/accommodations/${id}`),
+  create: (data) => request('/accommodations', {
     method: 'POST',
     body: JSON.stringify(data)
   }),
-  update: (id, data) => request(`/experiences/${id}`, {
+  update: (id, data) => request(`/accommodations/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(data)
   }),
-  setActive: (id, isActive) => request(`/experiences/${id}/is-active`, {
+  setActive: (id, isActive) => request(`/accommodations/${id}/is-active`, {
     method: 'PATCH',
     body: JSON.stringify({ isActive })
   }),
-  setStatus: (id, status) => request(`/experiences/${id}/status`, {
+  setStatus: (id, status) => request(`/accommodations/${id}/status`, {
     method: 'PATCH',
     body: JSON.stringify({ status })
   }),
-  remove: (id) => request(`/experiences/${id}`, { method: 'DELETE' }),
-  restore: (id) => request(`/experiences/${id}/restore`, { method: 'PATCH' })
+  remove: (id) => request(`/accommodations/${id}`, { method: 'DELETE' }),
+  restore: (id) => request(`/accommodations/${id}/restore`, { method: 'PATCH' })
 };

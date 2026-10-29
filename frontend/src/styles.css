@@ -293,20 +293,20 @@ h2 {
   border-radius: 4px;
 }
 
-.trips-table {
+.accommodations-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
 
-.trips-table th,
-.trips-table td {
+.accommodations-table th,
+.accommodations-table td {
   border-bottom: 1px solid var(--line);
   padding: 13px 12px;
   vertical-align: middle;
 }
 
-.trips-table th {
+.accommodations-table th {
   background: #f2f6fc;
   color: #333;
   font-size: 0.75rem;
@@ -314,35 +314,35 @@ h2 {
   white-space: nowrap;
 }
 
-.trips-table th:first-child {
+.accommodations-table th:first-child {
   border-top-left-radius: 4px;
 }
 
-.trips-table th:last-child {
+.accommodations-table th:last-child {
   border-top-right-radius: 4px;
 }
 
-.trips-table tbody tr:last-child td {
+.accommodations-table tbody tr:last-child td {
   border-bottom: 0;
 }
 
-.trips-table tbody tr:hover {
+.accommodations-table tbody tr:hover {
   background: #f8fbff;
 }
 
-.trip-name {
+.accommodation-name {
   display: grid;
   min-width: 160px;
   gap: 2px;
 }
 
-.trip-name strong {
+.accommodation-name strong {
   color: #1a1a1a;
   font-size: 0.83rem;
   font-weight: 700;
 }
 
-.trip-name span {
+.accommodation-name span {
   overflow: hidden;
   color: #595959;
   font-size: 0.72rem;
@@ -350,7 +350,7 @@ h2 {
   white-space: nowrap;
 }
 
-.trip-date {
+.accommodation-date {
   color: #444;
   font-size: 0.73rem;
   white-space: nowrap;
@@ -802,7 +802,7 @@ textarea {
     align-self: flex-start;
   }
 
-  .trips-table {
+  .accommodations-table {
     min-width: 690px;
   }
 

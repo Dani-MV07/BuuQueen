@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const experienceSchema = z.object({
+export const accommodationSchema = z.object({
   title: z.string().trim().min(1, 'El título es obligatorio.').max(120, 'Máximo 120 caracteres.'),
   city: z.string().trim().min(1, 'La ciudad es obligatoria.').max(80, 'Máximo 80 caracteres.'),
   price: z.string()

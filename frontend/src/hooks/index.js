@@ -1,2 +1,2 @@
-export { useExperience } from './useExperience';
-export { useExperiences } from './useExperiences';
+export { useAccommodation } from './useAccommodation';
+export { useAccommodations } from './useAccommodations';

@@ -4,24 +4,24 @@ export default function Layout() {
   return (
     <div className="admin-shell">
       <aside className="sidebar">
-        <NavLink to="/experiences" className="brand">
+        <NavLink to="/accommodations" className="brand">
           <span className="brand-kicker">BUUQUEEN</span>
           <span className="brand-name">Admin Dashboard</span>
         </NavLink>
         <div className="sidebar-section-label">GESTIÓN</div>
         <nav className="sidebar-nav" aria-label="Navegación principal">
-          <NavLink to="/experiences" end className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
-            <span aria-hidden="true">▦</span> Viajes
+          <NavLink to="/accommodations" end className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
+            <span aria-hidden="true">▦</span> Alojamientos
           </NavLink>
-          <NavLink to="/experiences/new" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
-            <span aria-hidden="true">＋</span> Crear viaje
+          <NavLink to="/accommodations/new" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
+            <span aria-hidden="true">＋</span> Crear alojamiento
           </NavLink>
         </nav>
         <div className="sidebar-footer">
           <div className="profile-avatar" aria-hidden="true">B</div>
           <div>
             <strong>Administración</strong>
-            <span>Gestión de viajes</span>
+            <span>Gestión de alojamientos</span>
           </div>
         </div>
       </aside>

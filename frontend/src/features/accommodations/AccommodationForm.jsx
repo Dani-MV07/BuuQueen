@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { experienceSchema } from './experienceSchema';
+import { accommodationSchema } from './accommodationSchema';
 
 function toFormValues(values = {}) {
   return {
@@ -12,7 +12,7 @@ function toFormValues(values = {}) {
   };
 }
 
-export default function ExperienceForm({
+export default function AccommodationForm({
   initialValues,
   onSubmit,
   submitLabel = 'Guardar',
@@ -25,7 +25,7 @@ export default function ExperienceForm({
     watch,
     formState: { errors }
   } = useForm({
-    resolver: zodResolver(experienceSchema),
+    resolver: zodResolver(accommodationSchema),
     defaultValues: toFormValues(initialValues)
   });
   const description = watch('description') || '';
@@ -38,7 +38,7 @@ export default function ExperienceForm({
     <form className="form-panel" onSubmit={handleSubmit(onSubmit)} noValidate>
       <div className="form-grid">
         <label>
-          <span>Nombre del viaje *</span>
+          <span>Nombre del alojamiento *</span>
           <input {...register('title')} maxLength={120} placeholder="Escapada de fin de semana a Valencia" aria-invalid={Boolean(errors.title)} />
           {errors.title && <small className="field-error">{errors.title.message}</small>}
         </label>
@@ -53,7 +53,7 @@ export default function ExperienceForm({
           {errors.price && <small className="field-error">{errors.price.message}</small>}
         </label>
         <label className="full-width">
-          <span>Descripción del viaje</span>
+          <span>Descripción del alojamiento</span>
           <textarea {...register('description')} maxLength={500} rows="6" placeholder="Aprende a preparar la auténtica paella valenciana en una huerta local con ingredientes frescos." aria-invalid={Boolean(errors.description)} />
           <small className="counter">{description.length}/500</small>
           {errors.description && <small className="field-error">{errors.description.message}</small>}

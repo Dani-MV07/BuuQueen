@@ -1,4 +1,4 @@
-# Airbnb Experiences - Frontend React
+# BuuQueen - Alojamientos - Frontend React
 
 Frontend React + Vite conectado a la API REST Express + MongoDB proporcionada.
 
@@ -24,13 +24,13 @@ VITE_API_URL=http://localhost:3000/api
 Puedes cambiarlo en `.env` si la API está en otro host/puerto.
 
 ## Funcionalidades
-- Listado de experiencias: `GET /api/experiences`
-- Detalle: `GET /api/experiences/:id`
-- Crear: `POST /api/experiences`
-- Editar: `PATCH /api/experiences/:id`
-- Eliminar: `DELETE /api/experiences/:id`
+- Listado de alojamientos: `GET /api/accommodations`
+- Detalle: `GET /api/accommodations/:id`
+- Crear: `POST /api/accommodations`
+- Editar: `PATCH /api/accommodations/:id`
+- Eliminar: `DELETE /api/accommodations/:id`
 - Formulario reutilizable de creación y edición validado con Zod.
-- Tabla de experiencias, skeletons, gestión de errores y confirmación de acciones.
+- Tabla de alojamientos, skeletons, gestión de errores y confirmación de acciones.
 - Carga diferida de páginas para dividir el código por rutas.
 - React Router para navegación.
 
@@ -46,23 +46,23 @@ src/
       ErrorState.jsx
       Skeleton.jsx
   context/
-    ExperiencesContext.jsx
+    AccommodationsContext.jsx
   features/
-    experiences/
-      ExperienceForm.jsx
-      experienceSchema.js
+    accommodations/
+      AccommodationForm.jsx
+      accommodationSchema.js
   hooks/
     index.js
-    useExperience.js
-    useExperiences.js
+    useAccommodation.js
+    useAccommodations.js
   pages/
-    ExperienceList.jsx
-    ExperienceDetail.jsx
-    ExperienceCreate.jsx
-    ExperienceEdit.jsx
+    AccommodationList.jsx
+    AccommodationDetail.jsx
+    AccommodationCreate.jsx
+    AccommodationEdit.jsx
   services/
     api.js
-    experienceService.js
+    accommodationService.js
   utils/
     SweetAlert.js
     errorHandler.js

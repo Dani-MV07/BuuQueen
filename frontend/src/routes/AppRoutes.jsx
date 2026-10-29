@@ -3,20 +3,20 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Skeleton from '../components/shared/Skeleton';
 import Layout from '../components/layout/Layout';
 
-const ExperienceCreate = lazy(() => import('../pages/ExperienceCreate'));
-const ExperienceEdit = lazy(() => import('../pages/ExperienceEdit'));
-const ExperienceList = lazy(() => import('../pages/ExperienceList'));
+const AccommodationCreate = lazy(() => import('../pages/AccommodationCreate'));
+const AccommodationEdit = lazy(() => import('../pages/AccommodationEdit'));
+const AccommodationList = lazy(() => import('../pages/AccommodationList'));
 
 export default function AppRoutes() {
   return (
     <Suspense fallback={<Skeleton />}>
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<Navigate to="/experiences" replace />} />
-          <Route path="/experiences" element={<ExperienceList />} />
-          <Route path="/experiences/new" element={<ExperienceCreate />} />
-          <Route path="/experiences/:id/edit" element={<ExperienceEdit />} />
-          <Route path="*" element={<Navigate to="/experiences" replace />} />
+          <Route index element={<Navigate to="/accommodations" replace />} />
+          <Route path="/accommodations" element={<AccommodationList />} />
+          <Route path="/accommodations/new" element={<AccommodationCreate />} />
+          <Route path="/accommodations/:id/edit" element={<AccommodationEdit />} />
+          <Route path="*" element={<Navigate to="/accommodations" replace />} />
         </Route>
       </Routes>
     </Suspense>

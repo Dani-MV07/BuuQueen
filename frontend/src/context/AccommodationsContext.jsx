@@ -38,6 +38,7 @@ export function AccommodationsProvider({ children }) {
     loadAccommodations();
   }, [loadAccommodations]);
 
+  //Todas las funciones de abajo la tienen que hacer los hooks, no el context. Hay que modificarlo
   const createAccommodation = useCallback(async (data) => {
     const created = await accommodationService.create(data);
     setAccommodations((current) => [...current, created]);

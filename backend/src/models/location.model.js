@@ -5,6 +5,7 @@ const locationSchema = new Schema(
     country: { type: String, required: true, trim: true },
     city: { type: String, required: true, trim: true },
     address: { type: String, required: true, trim: true },
+    description: { type: String, trim: true, maxlength: [2000, 'Máximo 2000 caracteres.'], default: '' },
     coordinates: {
       type: [{ type: Number, required: true }],
       validate: {

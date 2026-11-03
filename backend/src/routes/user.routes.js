@@ -5,5 +5,8 @@ import { createResourceRouter } from './resource.routes.js';
 export default createResourceRouter(UserController, {
   name: z.string().trim().min(1, 'El nombre es obligatorio.'),
   email: z.string().trim().email('El correo electrónico no es válido.'),
-  role_id: z.string().regex(/^[a-f\d]{24}$/i, 'El rol debe ser un ObjectId válido.')
+  role_id: z.string().regex(/^[a-f\d]{24}$/i, 'El rol debe ser un ObjectId válido.'),
+  description: z.string().trim().max(2000, 'La descripción no puede superar los 2000 caracteres.').optional(),
+  status: z.string().trim().min(1, 'El estado es obligatorio.').optional(),
+  isActive: z.boolean({ error: 'isActive debe ser un valor booleano.' }).optional()
 });

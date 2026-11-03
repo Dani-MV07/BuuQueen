@@ -4,6 +4,7 @@ const hostSchema = new Schema(
   {
     user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     bio: { type: String, trim: true, default: '' },
+    description: { type: String, trim: true, maxlength: [2000, 'Máximo 2000 caracteres.'], default: '' },
     slug: { type: String, required: true, unique: true, trim: true },
     status: { type: String, required: true, trim: true, default: 'active' },
     isActive: { type: Boolean, default: true },

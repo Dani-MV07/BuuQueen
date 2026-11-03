@@ -4,6 +4,7 @@ const userSchema = new Schema(
   {
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, trim: true, lowercase: true },
+    description: { type: String, trim: true, maxlength: [2000, 'Máximo 2000 caracteres.'], default: '' },
     role_id: { type: Schema.Types.ObjectId, ref: 'Role', required: true },
     slug: { type: String, required: true, unique: true, trim: true },
     status: { type: String, required: true, trim: true, default: 'active' },

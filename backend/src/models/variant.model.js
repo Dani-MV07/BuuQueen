@@ -7,6 +7,7 @@ const variantSchema = new Schema(
     price: { type: Number, required: true, min: 0 },
     stock: { type: Number, required: true, min: 0, validate: Number.isInteger },
     capacity: { type: Number, required: true, min: 1, validate: Number.isInteger },
+    description: { type: String, trim: true, maxlength: [2000, 'Máximo 2000 caracteres.'], default: '' },
     slug: { type: String, required: true, unique: true, trim: true },
     status: { type: String, required: true, trim: true, default: 'available' },
     isActive: { type: Boolean, default: true },

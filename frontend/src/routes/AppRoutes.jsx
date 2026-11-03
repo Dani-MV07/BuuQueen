@@ -6,6 +6,9 @@ import Layout from '../components/layout/Layout';
 const AccommodationCreate = lazy(() => import('../pages/AccommodationCreate'));
 const AccommodationEdit = lazy(() => import('../pages/AccommodationEdit'));
 const AccommodationList = lazy(() => import('../pages/AccommodationList'));
+const CategoryCreate = lazy(() => import('../pages/CategoryCreate'));
+const CategoryEdit = lazy(() => import('../pages/CategoryEdit'));
+const CategoryList = lazy(() => import('../pages/CategoryList'));
 
 export default function AppRoutes() {
   return (
@@ -16,6 +19,9 @@ export default function AppRoutes() {
           <Route path="/accommodations" element={<AccommodationList />} />
           <Route path="/accommodations/new" element={<AccommodationCreate />} />
           <Route path="/accommodations/:id/edit" element={<AccommodationEdit />} />
+          <Route path="/categories" element={<CategoryList />} />
+          <Route path="/categories/new" element={<CategoryCreate />} />
+          <Route path="/categories/:id/edit" element={<CategoryEdit />} />
           <Route path="*" element={<Navigate to="/accommodations" replace />} />
         </Route>
       </Routes>

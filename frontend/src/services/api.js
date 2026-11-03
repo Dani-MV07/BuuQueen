@@ -29,7 +29,27 @@ export const accommodationsApi = {
 };
 
 export const categoriesApi = {
-  list: () => request('/categories')
+  list: () => request('/categories'),
+  listDeleted: () => request('/categories/deleted'),
+  get: (id) => request(`/categories/${id}`),
+  create: (data) => request('/categories', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }),
+  update: (id, data) => request(`/categories/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data)
+  }),
+  setActive: (id, isActive) => request(`/categories/${id}/is-active`, {
+    method: 'PATCH',
+    body: JSON.stringify({ isActive })
+  }),
+  setStatus: (id, status) => request(`/categories/${id}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status })
+  }),
+  remove: (id) => request(`/categories/${id}`, { method: 'DELETE' }),
+  restore: (id) => request(`/categories/${id}/restore`, { method: 'PATCH' })
 };
 
 export const locationsApi = {

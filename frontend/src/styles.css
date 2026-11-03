@@ -570,6 +570,48 @@ button.active-badge.is-inactive:hover:not(:disabled) {
   max-width: 850px;
 }
 
+.category-form {
+  max-width: 960px;
+}
+
+.category-publication-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+}
+
+.category-publication-grid > label:first-child {
+  display: grid;
+  max-width: 360px;
+  gap: 8px;
+  color: #333;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.category-publication-grid > label:first-child > span {
+  color: #333;
+  font-size: 0.82rem;
+}
+
+.category-publication-grid em {
+  color: #b94a36;
+  font-style: normal;
+}
+
+.categories-table {
+  min-width: 760px;
+}
+
+.category-name {
+  max-width: 360px;
+}
+
+.category-name span {
+  max-width: 100%;
+}
+
 .accommodation-editor {
   max-width: 960px;
   margin: 0 auto;
@@ -1035,19 +1077,20 @@ textarea {
   }
 
   .sidebar {
-    position: static;
+    position: sticky;
+    z-index: 5;
+    top: 0;
     height: auto;
     min-height: auto;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
     border: 0;
-    border-bottom: 0;
     border-radius: 0;
-    padding: 10px 14px;
+    padding: 10px 14px 12px;
   }
 
   .brand {
-    margin: 0 auto 0 0;
+    margin: 0 0 9px;
   }
 
   .sidebar-section-label,
@@ -1057,8 +1100,9 @@ textarea {
   }
 
   .sidebar-nav {
-    display: flex;
-    gap: 5px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
   }
 
   .sidebar-link {
@@ -1133,6 +1177,11 @@ textarea {
 
   .form-section {
     padding: 21px 17px 23px;
+  }
+
+  .category-publication-grid {
+    grid-template-columns: 1fr;
+    gap: 19px;
   }
 
   .form-section-heading {

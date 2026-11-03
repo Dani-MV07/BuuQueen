@@ -1,6 +1,9 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
 export default function Layout() {
+  const { pathname } = useLocation();
+  const categorySectionActive = pathname === '/categories' || /^\/categories\/[^/]+\/edit$/.test(pathname);
+
   return (
     <div className="admin-shell">
       <aside className="sidebar">
@@ -16,12 +19,18 @@ export default function Layout() {
           <NavLink to="/accommodations/new" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
             <span aria-hidden="true">＋</span> Crear alojamiento
           </NavLink>
+          <NavLink to="/categories" end className={`sidebar-link${categorySectionActive ? ' active' : ''}`}>
+            <span aria-hidden="true">◇</span> Categorías
+          </NavLink>
+          <NavLink to="/categories/new" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
+            <span aria-hidden="true">＋</span> Crear categoría
+          </NavLink>
         </nav>
         <div className="sidebar-footer">
           <div className="profile-avatar" aria-hidden="true">B</div>
           <div>
             <strong>Administración</strong>
-            <span>Gestión de alojamientos</span>
+            <span>Gestión del catálogo</span>
           </div>
         </div>
       </aside>

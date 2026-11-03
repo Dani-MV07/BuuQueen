@@ -52,15 +52,19 @@ export default function AccommodationEdit() {
   }
 
   return (
-    <section>
-      <Link className="back-link" to="/accommodations">← Volver a alojamientos</Link>
-      <div className="page-header compact">
-        <div>
+    <section className="accommodation-editor">
+      <Link className="back-link editor-back-link" to="/accommodations">
+        <span aria-hidden="true">←</span> Volver a alojamientos
+      </Link>
+      <header className="editor-header">
+        <div className="editor-mark editor-mark-edit" aria-hidden="true">✎</div>
+        <div className="editor-heading-copy">
           <p className="eyebrow">EDICIÓN DE ALOJAMIENTO</p>
           <h1>Editar alojamiento</h1>
-          <p className="muted">Actualiza los datos del alojamiento y guarda los cambios.</p>
+          <p>Actualiza la información y los ajustes de publicación de este alojamiento.</p>
         </div>
-      </div>
+        <span className="editor-mode">Editando</span>
+      </header>
       {error && <div className="alert error" role="alert">{error}</div>}
       <AccommodationForm
         initialValues={accommodation}

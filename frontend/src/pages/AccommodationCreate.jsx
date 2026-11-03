@@ -41,15 +41,19 @@ export default function AccommodationCreate() {
   }
 
   return (
-    <section>
-      <Link className="back-link" to="/accommodations">← Volver a alojamientos</Link>
-      <div className="page-header compact">
-        <div>
+    <section className="accommodation-editor">
+      <Link className="back-link editor-back-link" to="/accommodations">
+        <span aria-hidden="true">←</span> Volver a alojamientos
+      </Link>
+      <header className="editor-header">
+        <div className="editor-mark" aria-hidden="true">＋</div>
+        <div className="editor-heading-copy">
           <p className="eyebrow">NUEVO ALOJAMIENTO</p>
           <h1>Crear alojamiento</h1>
-          <p className="muted">Completa los datos del alojamiento y añádelo al panel de administración.</p>
+          <p>Completa la información para añadir un nuevo alojamiento a tu catálogo.</p>
         </div>
-      </div>
+        <span className="editor-mode">Nuevo registro</span>
+      </header>
       {error && <div className="alert error" role="alert">{error}</div>}
       <AccommodationForm
         categories={categories}

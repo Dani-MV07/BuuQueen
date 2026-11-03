@@ -809,6 +809,11 @@ select {
   cursor: pointer;
 }
 
+div.swal2-container .swal2-select {
+  width: calc(100% - 4em);
+  max-width: 100%;
+}
+
 input::placeholder,
 textarea::placeholder {
   color: #8993a2;

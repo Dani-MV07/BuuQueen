@@ -10,7 +10,8 @@ const statusOptions = new Map([
   ['scheduled', 'Programado'],
   ['active', 'En curso'],
   ['completed', 'Completado'],
-  ['cancelled', 'Cancelado']
+  ['cancelled', 'Cancelado'],
+  ['published', 'Publicado']
 ]);
 
 function getStatusLabel(status) {

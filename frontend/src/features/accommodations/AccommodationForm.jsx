@@ -3,6 +3,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { accommodationSchema } from './accommodationSchema';
 
+const statusOptions = [
+  ['scheduled', 'Programado'],
+  ['active', 'En curso'],
+  ['completed', 'Completado'],
+  ['cancelled', 'Cancelado'],
+  ['published', 'Publicado']
+];
+
 function toFormValues(values = {}) {
   const getId = (value) => (
     value && typeof value === 'object' ? value._id ?? '' : value ?? ''
@@ -12,7 +20,10 @@ function toFormValues(values = {}) {
     title: values.title ?? '',
     category_id: getId(values.category_id),
     location_id: getId(values.location_id),
-    host_id: getId(values.host_id)
+    host_id: getId(values.host_id),
+    description: values.description ?? '',
+    status: values.status ?? 'published',
+    isActive: values.isActive ?? true
   };
 }
 
@@ -80,6 +91,40 @@ export default function AccommodationForm({
             ))}
           </select>
           {errors.host_id && <small className="field-error">{errors.host_id.message}</small>}
+        </label>
+        <label>
+          <span>Estado *</span>
+          <select {...register('status')} aria-invalid={Boolean(errors.status)}>
+            {!statusOptions.some(([value]) => value === initialValues?.status)
+              && initialValues?.status
+              && <option value={initialValues.status}>Mantener estado actual: {initialValues.status}</option>}
+            {statusOptions.map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+          {errors.status && <small className="field-error">{errors.status.message}</small>}
+        </label>
+        <label>
+          <span>Disponibilidad</span>
+          <select
+            {...register('isActive', { setValueAs: value => value === 'true' })}
+            aria-invalid={Boolean(errors.isActive)}
+          >
+            <option value="true">Disponible</option>
+            <option value="false">No disponible</option>
+          </select>
+          {errors.isActive && <small className="field-error">{errors.isActive.message}</small>}
+        </label>
+        <label className="full-width">
+          <span>Descripción</span>
+          <textarea
+            {...register('description')}
+            maxLength={2000}
+            rows={5}
+            placeholder="Describe el alojamiento..."
+            aria-invalid={Boolean(errors.description)}
+          />
+          {errors.description && <small className="field-error">{errors.description.message}</small>}
         </label>
       </div>
       <div className="form-actions">

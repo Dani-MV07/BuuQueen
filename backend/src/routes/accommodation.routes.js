@@ -17,10 +17,19 @@ const accommodationFields = {
   host_id: z.string().regex(/^[a-f\d]{24}$/i, 'El ID de anfitrión debe ser un ObjectId válido.')
 };
 
+const editableFields = {
+  description: z.string().trim().max(2000, 'La descripción no puede superar los 2000 caracteres.'),
+  status: z.string().trim().min(1, 'El estado es obligatorio.'),
+  isActive: z.boolean({ error: 'isActive debe ser un valor booleano.' })
+};
+
 const createSchema = z.object({
   body: z.object({
     title: z.string().trim().min(1, 'El título es obligatorio.').max(120, 'El título no puede superar los 120 caracteres.'),
-    ...accommodationFields
+    ...accommodationFields,
+    ...Object.fromEntries(
+      Object.entries(editableFields).map(([field, schema]) => [field, schema.optional()])
+    )
   })
 });
 
@@ -30,6 +39,9 @@ const updateSchema = z.object({
     title: z.string().trim().min(1, 'El título no puede estar vacío.').max(120, 'El título no puede superar los 120 caracteres.').optional(),
     ...Object.fromEntries(
       Object.entries(accommodationFields).map(([field, schema]) => [field, schema.optional()])
+    ),
+    ...Object.fromEntries(
+      Object.entries(editableFields).map(([field, schema]) => [field, schema.optional()])
     )
   })
 });

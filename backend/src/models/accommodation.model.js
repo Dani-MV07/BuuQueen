@@ -9,6 +9,12 @@ const accommodationSchema = new Schema(
       trim: true,
       maxlength: [120, 'Máximo 120 caracteres.']
     },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [2000, 'Máximo 2000 caracteres.'],
+      default: ''
+    },
     category_id: {
       type: Schema.Types.ObjectId,
       ref: 'Category',

@@ -604,6 +604,24 @@ button.active-badge.is-inactive:hover:not(:disabled) {
   min-width: 760px;
 }
 
+.management-table {
+  min-width: 760px;
+}
+
+.management-status-field {
+  display: grid;
+  max-width: 360px;
+  gap: 8px;
+  color: #333;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.management-status-field em {
+  color: #b94a36;
+  font-style: normal;
+}
+
 .category-name {
   max-width: 360px;
 }
@@ -1182,6 +1200,10 @@ textarea {
   .category-publication-grid {
     grid-template-columns: 1fr;
     gap: 19px;
+  }
+
+  .management-table {
+    min-width: 760px;
   }
 
   .form-section-heading {

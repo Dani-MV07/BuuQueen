@@ -13,17 +13,26 @@ export default function Layout() {
         </NavLink>
         <div className="sidebar-section-label">GESTIÓN</div>
         <nav className="sidebar-nav" aria-label="Navegación principal">
-          <NavLink to="/accommodations" end className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
+          <NavLink to="/accommodations" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
             <span aria-hidden="true">▦</span> Alojamientos
           </NavLink>
-          <NavLink to="/accommodations/new" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
-            <span aria-hidden="true">＋</span> Crear alojamiento
-          </NavLink>
-          <NavLink to="/categories" end className={`sidebar-link${categorySectionActive ? ' active' : ''}`}>
+          <NavLink to="/categories" className={`sidebar-link${categorySectionActive || pathname === '/categories/new' ? ' active' : ''}`}>
             <span aria-hidden="true">◇</span> Categorías
           </NavLink>
-          <NavLink to="/categories/new" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
-            <span aria-hidden="true">＋</span> Crear categoría
+          <NavLink to="/hosts" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
+            <span aria-hidden="true">♙</span> Anfitriones
+          </NavLink>
+          <NavLink to="/locations" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
+            <span aria-hidden="true">⌖</span> Ubicaciones
+          </NavLink>
+          <NavLink to="/roles" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
+            <span aria-hidden="true">♧</span> Roles
+          </NavLink>
+          <NavLink to="/users" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
+            <span aria-hidden="true">♧</span> Usuarios
+          </NavLink>
+          <NavLink to="/variants" className={({ isActive }) => `sidebar-link${isActive ? ' active' : ''}`}>
+            <span aria-hidden="true">◇</span> Variantes
           </NavLink>
         </nav>
         <div className="sidebar-footer">

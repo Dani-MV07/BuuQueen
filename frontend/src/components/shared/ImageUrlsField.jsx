@@ -128,21 +128,41 @@ export default function ImageUrlsField({
 
       {removedImages.length > 0 && (
         <div className="image-url-undo-list" aria-live="polite">
-          <span>{removedImages.length} imagen(es) se quitarán al guardar.</span>
-          {removedImages.map(image => {
-            const savedImage = images.find(current => current?._id === image.imageId);
-            return (
-              <button
-                className="text-button"
-                key={image.imageId}
-                type="button"
-                onClick={() => undoImageRemoval(image.imageId)}
-                disabled={disabled}
-              >
-                Deshacer {savedImage?.url_image || 'imagen'}
-              </button>
-            );
-          })}
+          <div className="image-url-undo-heading">
+            <strong>Imágenes pendientes de quitar</strong>
+            <span>Se quitarán al guardar los cambios.</span>
+          </div>
+          <div className="image-url-removed-items">
+            {removedImages.map(image => {
+              const savedImage = images.find(current => current?._id === image.imageId);
+              if (!savedImage) return null;
+              const imageNumber = images.findIndex(current => current?._id === image.imageId) + 1;
+              return (
+                <div className="image-url-removed-item" key={image.imageId}>
+                  <img
+                    className="image-url-removed-preview"
+                    src={savedImage.url_image}
+                    alt=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                  <span className="image-url-removed-copy">
+                    <strong>Imagen {imageNumber}</strong>
+                    <small>Marcada para quitar</small>
+                  </span>
+                  <button
+                    className="button button-secondary image-url-restore"
+                    type="button"
+                    onClick={() => undoImageRemoval(image.imageId)}
+                    disabled={disabled}
+                    aria-label={`Restaurar imagen ${imageNumber}`}
+                  >
+                    Restaurar imagen
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 

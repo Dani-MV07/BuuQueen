@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation as useRouteLocation, useNavigate, useParams } from 'react-router-dom';
 import CategoryForm from '../features/CategoryForm';
 import ErrorState from '../../../components/shared/ErrorState';
 import Skeleton from '../../../components/shared/Skeleton';
 import categoryService from '../services/categoryService';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function CategoryEdit() {
   const { id } = useParams();
+  const routeLocation = useRouteLocation();
   const navigate = useNavigate();
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(routeLocation.state?.notice ?? '');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -36,7 +38,11 @@ export default function CategoryEdit() {
     setSubmitting(true);
     setError('');
     try {
-      await categoryService.update(id, data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'Category',
+        saveResource: payload => categoryService.update(id, payload)
+      });
       navigate('/categories');
     } catch (err) {
       setError(err.message);

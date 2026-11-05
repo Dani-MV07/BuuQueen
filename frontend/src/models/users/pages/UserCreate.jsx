@@ -5,6 +5,7 @@ import Skeleton from '../../../components/shared/Skeleton';
 import UserForm from '../features/UserForm';
 import roleService from '../../roles/services/roleService';
 import userService from '../services/userService';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function UserCreate() {
   const navigate = useNavigate();
@@ -24,9 +25,19 @@ export default function UserCreate() {
     setSubmitting(true);
     setSubmitError('');
     try {
-      await userService.create(data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'User',
+        saveResource: userService.create
+      });
       navigate('/users');
     } catch (err) {
+      if (err.resourceSaved?._id) {
+        navigate(`/users/${err.resourceSaved._id}/edit`, {
+          state: { notice: err.message }
+        });
+        return;
+      }
       setSubmitError(err.message);
     } finally {
       setSubmitting(false);

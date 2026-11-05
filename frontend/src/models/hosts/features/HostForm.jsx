@@ -2,19 +2,22 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import ImageUrlsField from '../../../components/shared/ImageUrlsField';
 import { hostSchema } from './hostSchema';
 
 const statuses = [['active', 'Activo'], ['inactive', 'Inactivo'], ['draft', 'Borrador'], ['archived', 'Archivado']];
 
 export default function HostForm({ initialValues, users, onSubmit, submitting }) {
-  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
+  const { register, control, handleSubmit, reset, watch, formState: { errors } } = useForm({
     resolver: zodResolver(hostSchema),
     defaultValues: {
       user_id: initialValues?.user_id?._id ?? initialValues?.user_id ?? '',
       bio: initialValues?.bio ?? '',
       description: initialValues?.description ?? '',
       status: initialValues?.status ?? 'active',
-      isActive: initialValues?.isActive !== false
+      isActive: initialValues?.isActive !== false,
+      imageUrls: [],
+      imageIdsToRemove: []
     }
   });
   useEffect(() => {
@@ -23,7 +26,9 @@ export default function HostForm({ initialValues, users, onSubmit, submitting })
       bio: initialValues?.bio ?? '',
       description: initialValues?.description ?? '',
       status: initialValues?.status ?? 'active',
-      isActive: initialValues?.isActive !== false
+      isActive: initialValues?.isActive !== false,
+      imageUrls: [],
+      imageIdsToRemove: []
     });
   }, [initialValues, reset]);
   const isActive = watch('isActive');
@@ -50,6 +55,7 @@ export default function HostForm({ initialValues, users, onSubmit, submitting })
           </label>
         </div>
       </section>
+      <ImageUrlsField control={control} register={register} errors={errors} images={initialValues?.images} disabled={submitting} />
       <section className="form-section publication-section">
         <div className="form-section-heading"><span className="form-section-number">02</span><div><h2>Publicación</h2><p>Configura el estado y la disponibilidad del anfitrión.</p></div></div>
         <div className="category-publication-grid">

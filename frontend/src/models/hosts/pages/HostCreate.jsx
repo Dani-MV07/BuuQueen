@@ -5,6 +5,7 @@ import Skeleton from '../../../components/shared/Skeleton';
 import HostForm from '../features/HostForm';
 import hostService from '../services/hostService';
 import userService from '../../users/services/userService';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function HostCreate() {
   const navigate = useNavigate();
@@ -30,9 +31,19 @@ export default function HostCreate() {
     setSubmitting(true);
     setSubmitError('');
     try {
-      await hostService.create(data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'Host',
+        saveResource: hostService.create
+      });
       navigate('/hosts');
     } catch (err) {
+      if (err.resourceSaved?._id) {
+        navigate(`/hosts/${err.resourceSaved._id}/edit`, {
+          state: { notice: err.message }
+        });
+        return;
+      }
       setSubmitError(err.message);
     } finally {
       setSubmitting(false);

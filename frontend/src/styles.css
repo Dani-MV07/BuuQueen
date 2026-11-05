@@ -861,6 +861,116 @@ textarea {
   font-weight: 400;
 }
 
+.image-url-section {
+  display: grid;
+  gap: 14px;
+}
+
+.image-url-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 210px));
+  gap: 10px;
+}
+
+.image-url-card {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfe;
+  padding: 9px;
+}
+
+.image-url-preview {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #f2f6fc;
+}
+
+.image-url-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-url-card > strong {
+  color: #263246;
+  font-size: 0.76rem;
+}
+
+.image-url-readonly {
+  min-height: 36px;
+  overflow: hidden;
+  padding: 8px 9px;
+  font-size: 0.72rem;
+  text-overflow: ellipsis;
+}
+
+.image-url-remove {
+  justify-self: start;
+  min-height: 34px;
+  padding: 7px 10px;
+  font-size: 0.72rem;
+}
+
+.image-url-undo-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.text-button {
+  border: 0;
+  background: transparent;
+  color: var(--teal-dark);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+  text-decoration: underline;
+}
+
+.image-url-add-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+}
+
+.image-url-input {
+  display: grid;
+  min-width: 0;
+  gap: 7px;
+  color: #333;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.image-url-submit {
+  min-width: 132px;
+  min-height: 42px;
+  border-radius: 7px;
+  background: #3f5848;
+}
+
+.image-url-submit:hover {
+  background: #314638;
+}
+
+.image-url-remove-all {
+  justify-self: start;
+  min-height: 34px;
+  padding: 7px 10px;
+  font-size: 0.72rem;
+}
+
 .availability-field {
   display: grid;
   max-width: 360px;
@@ -1165,6 +1275,18 @@ textarea {
 
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .image-url-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .image-url-add-row {
+    grid-template-columns: 1fr;
+  }
+
+  .image-url-submit {
+    justify-self: start;
   }
 
   .full-width {

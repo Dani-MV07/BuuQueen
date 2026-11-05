@@ -5,6 +5,7 @@ import Skeleton from '../../../components/shared/Skeleton';
 import VariantForm from '../features/VariantForm';
 import accommodationService from '../../accommodations/services/accommodationService';
 import variantService from '../services/variantService';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function VariantCreate() {
   const navigate = useNavigate();
@@ -24,9 +25,19 @@ export default function VariantCreate() {
     setSubmitting(true);
     setSubmitError('');
     try {
-      await variantService.create(data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'Variant',
+        saveResource: variantService.create
+      });
       navigate('/variants');
     } catch (err) {
+      if (err.resourceSaved?._id) {
+        navigate(`/variants/${err.resourceSaved._id}/edit`, {
+          state: { notice: err.message }
+        });
+        return;
+      }
       setSubmitError(err.message);
     } finally {
       setSubmitting(false);

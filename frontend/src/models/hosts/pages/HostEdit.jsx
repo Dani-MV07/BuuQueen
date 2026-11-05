@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation as useRouteLocation, useNavigate, useParams } from 'react-router-dom';
 import ErrorState from '../../../components/shared/ErrorState';
 import Skeleton from '../../../components/shared/Skeleton';
 import HostForm from '../features/HostForm';
 import hostService from '../services/hostService';
 import userService from '../../users/services/userService';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function HostEdit() {
   const { id } = useParams();
+  const routeLocation = useRouteLocation();
   const navigate = useNavigate();
   const [host, setHost] = useState(null);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [submitError, setSubmitError] = useState('');
+  const [submitError, setSubmitError] = useState(routeLocation.state?.notice ?? '');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -36,7 +38,11 @@ export default function HostEdit() {
     setSubmitting(true);
     setSubmitError('');
     try {
-      await hostService.update(id, data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'Host',
+        saveResource: payload => hostService.update(id, payload)
+      });
       navigate('/hosts');
     } catch (err) {
       setSubmitError(err.message);

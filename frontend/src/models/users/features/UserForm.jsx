@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import ImageUrlsField from '../../../components/shared/ImageUrlsField';
 import { userSchema } from './userSchema';
 
 const statuses = [['active', 'Activo'], ['inactive', 'Inactivo'], ['draft', 'Borrador'], ['archived', 'Archivado']];
@@ -13,12 +14,14 @@ function getValues(user) {
     role_id: user?.role_id?._id ?? user?.role_id ?? '',
     description: user?.description ?? '',
     status: user?.status ?? 'active',
-    isActive: user?.isActive !== false
+    isActive: user?.isActive !== false,
+    imageUrls: [],
+    imageIdsToRemove: []
   };
 }
 
 export default function UserForm({ initialValues, roles, onSubmit, submitting }) {
-  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
+  const { register, control, handleSubmit, reset, watch, formState: { errors } } = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: getValues(initialValues)
   });
@@ -36,6 +39,7 @@ export default function UserForm({ initialValues, roles, onSubmit, submitting })
           <label className="form-description full-width"><span>Descripción</span><textarea {...register('description')} maxLength={2000} rows={4} placeholder="Información adicional del usuario..." aria-invalid={Boolean(errors.description)} />{errors.description && <small className="field-error">{errors.description.message}</small>}</label>
         </div>
       </section>
+      <ImageUrlsField control={control} register={register} errors={errors} images={initialValues?.images} disabled={submitting} />
       <section className="form-section publication-section">
         <div className="form-section-heading"><span className="form-section-number">02</span><div><h2>Publicación</h2><p>Configura el estado y la disponibilidad de la cuenta.</p></div></div>
         <div className="category-publication-grid">

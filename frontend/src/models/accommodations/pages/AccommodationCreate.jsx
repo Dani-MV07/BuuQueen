@@ -7,6 +7,7 @@ import { useAccommodations } from '../hooks/useAccommodations';
 import { useCategories } from '../../categories/hooks/useCategories';
 import { useHosts } from '../../hosts/hooks/useHosts';
 import { useLocations } from '../../locations/hooks/useLocations';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function AccommodationCreate() {
   const navigate = useNavigate();
@@ -23,9 +24,19 @@ export default function AccommodationCreate() {
     setSubmitting(true);
     setError('');
     try {
-      await createAccommodation(data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'Accommodation',
+        saveResource: createAccommodation
+      });
       navigate('/accommodations');
     } catch (err) {
+      if (err.resourceSaved?._id) {
+        navigate(`/accommodations/${err.resourceSaved._id}/edit`, {
+          state: { notice: err.message }
+        });
+        return;
+      }
       setError(err.message);
     } finally {
       setSubmitting(false);

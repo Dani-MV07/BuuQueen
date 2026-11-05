@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation as useRouteLocation, useNavigate, useParams } from 'react-router-dom';
 import ErrorState from '../../../components/shared/ErrorState';
 import Skeleton from '../../../components/shared/Skeleton';
 import VariantForm from '../features/VariantForm';
 import accommodationService from '../../accommodations/services/accommodationService';
 import variantService from '../services/variantService';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function VariantEdit() {
   const { id } = useParams();
+  const routeLocation = useRouteLocation();
   const navigate = useNavigate();
   const [variant, setVariant] = useState(null);
   const [accommodations, setAccommodations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [submitError, setSubmitError] = useState('');
+  const [submitError, setSubmitError] = useState(routeLocation.state?.notice ?? '');
   const [submitting, setSubmitting] = useState(false);
   useEffect(() => {
     let active = true;
@@ -31,7 +33,11 @@ export default function VariantEdit() {
     setSubmitting(true);
     setSubmitError('');
     try {
-      await variantService.update(id, data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'Variant',
+        saveResource: payload => variantService.update(id, payload)
+      });
       navigate('/variants');
     } catch (err) {
       setSubmitError(err.message);

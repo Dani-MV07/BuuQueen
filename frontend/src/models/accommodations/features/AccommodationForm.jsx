@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import ImageUrlsField from '../../../components/shared/ImageUrlsField';
 import { accommodationSchema } from './accommodationSchema';
 
 const statusOptions = [
@@ -24,7 +25,9 @@ function toFormValues(values = {}) {
     host_id: getId(values.host_id),
     description: values.description ?? '',
     status: values.status ?? 'published',
-    isActive: values.isActive === false || values.isActive === 'false' ? false : true
+    isActive: values.isActive === false || values.isActive === 'false' ? false : true,
+    imageUrls: [],
+    imageIdsToRemove: []
   };
 }
 
@@ -40,6 +43,7 @@ export default function AccommodationForm({
 }) {
   const {
     register,
+    control,
     handleSubmit,
     reset,
     watch,
@@ -139,6 +143,14 @@ export default function AccommodationForm({
           <small className="field-hint">Hasta 2000 caracteres.</small>
         </label>
       </section>
+
+      <ImageUrlsField
+        control={control}
+        register={register}
+        errors={errors}
+        images={initialValues?.images}
+        disabled={submitting}
+      />
 
       <section className="form-section publication-section" aria-labelledby="publication-heading">
         <div className="form-section-heading">

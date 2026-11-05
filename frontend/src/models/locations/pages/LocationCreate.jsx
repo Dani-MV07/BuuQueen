@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import LocationForm from '../features/LocationForm';
 import locationService from '../services/locationService';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function LocationCreate() {
   const navigate = useNavigate();
@@ -12,9 +13,19 @@ export default function LocationCreate() {
     setSubmitting(true);
     setError('');
     try {
-      await locationService.create(data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'Location',
+        saveResource: locationService.create
+      });
       navigate('/locations');
     } catch (err) {
+      if (err.resourceSaved?._id) {
+        navigate(`/locations/${err.resourceSaved._id}/edit`, {
+          state: { notice: err.message }
+        });
+        return;
+      }
       setError(err.message);
     } finally {
       setSubmitting(false);

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import ImageUrlsField from '../../../components/shared/ImageUrlsField';
 import { variantSchema } from './variantSchema';
 
 const statuses = [['available', 'Disponible'], ['unavailable', 'No disponible'], ['draft', 'Borrador'], ['archived', 'Archivado']];
@@ -15,12 +16,14 @@ function getValues(variant) {
     capacity: variant?.capacity ?? '',
     description: variant?.description ?? '',
     status: variant?.status ?? 'available',
-    isActive: variant?.isActive !== false
+    isActive: variant?.isActive !== false,
+    imageUrls: [],
+    imageIdsToRemove: []
   };
 }
 
 export default function VariantForm({ initialValues, accommodations, onSubmit, submitting }) {
-  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
+  const { register, control, handleSubmit, reset, watch, formState: { errors } } = useForm({
     resolver: zodResolver(variantSchema),
     defaultValues: getValues(initialValues)
   });
@@ -40,6 +43,7 @@ export default function VariantForm({ initialValues, accommodations, onSubmit, s
           <label className="form-description full-width"><span>Descripción</span><textarea {...register('description')} maxLength={2000} rows={4} placeholder="Detalles de esta variante..." aria-invalid={Boolean(errors.description)} />{errors.description && <small className="field-error">{errors.description.message}</small>}</label>
         </div>
       </section>
+      <ImageUrlsField control={control} register={register} errors={errors} images={initialValues?.images} disabled={submitting} />
       <section className="form-section publication-section">
         <div className="form-section-heading"><span className="form-section-number">02</span><div><h2>Publicación</h2><p>Configura el estado y la disponibilidad de la variante.</p></div></div>
         <div className="category-publication-grid">

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import ImageUrlsField from '../../../components/shared/ImageUrlsField';
 import { categorySchema } from './categorySchema';
 
 const statusOptions = [
@@ -16,7 +17,9 @@ function toFormValues(values = {}) {
     name: values.name ?? '',
     description: values.description ?? '',
     status: values.status ?? 'active',
-    isActive: values.isActive === false || values.isActive === 'false' ? false : true
+    isActive: values.isActive === false || values.isActive === 'false' ? false : true,
+    imageUrls: [],
+    imageIdsToRemove: []
   };
 }
 
@@ -28,6 +31,7 @@ export default function CategoryForm({
 }) {
   const {
     register,
+    control,
     handleSubmit,
     reset,
     watch,
@@ -78,6 +82,14 @@ export default function CategoryForm({
           </label>
         </div>
       </section>
+
+      <ImageUrlsField
+        control={control}
+        register={register}
+        errors={errors}
+        images={initialValues?.images}
+        disabled={submitting}
+      />
 
       <section className="form-section publication-section" aria-labelledby="category-publication-heading">
         <div className="form-section-heading">

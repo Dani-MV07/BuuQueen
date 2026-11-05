@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation as useRouteLocation, useNavigate, useParams } from 'react-router-dom';
 import ErrorState from '../../../components/shared/ErrorState';
 import Skeleton from '../../../components/shared/Skeleton';
 import LocationForm from '../features/LocationForm';
 import locationService from '../services/locationService';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function LocationEdit() {
   const { id } = useParams();
+  const routeLocation = useRouteLocation();
   const navigate = useNavigate();
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [submitError, setSubmitError] = useState('');
+  const [submitError, setSubmitError] = useState(routeLocation.state?.notice ?? '');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -31,7 +33,11 @@ export default function LocationEdit() {
     setSubmitting(true);
     setSubmitError('');
     try {
-      await locationService.update(id, data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'Location',
+        saveResource: payload => locationService.update(id, payload)
+      });
       navigate('/locations');
     } catch (err) {
       setSubmitError(err.message);

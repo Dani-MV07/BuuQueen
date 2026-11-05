@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { imageUrlsSchema, removedImageIdsSchema } from '../../../components/shared/imageUrlSchema';
 
 export const locationSchema = z.object({
   country: z.string().trim().min(1, 'El país es obligatorio.').max(120, 'Máximo 120 caracteres.'),
@@ -8,5 +9,7 @@ export const locationSchema = z.object({
   longitude: z.number().min(-180, 'La longitud debe estar entre -180 y 180.').max(180, 'La longitud debe estar entre -180 y 180.'),
   description: z.string().trim().max(2000, 'Máximo 2000 caracteres.'),
   status: z.string().trim().min(1, 'Selecciona un estado.'),
-  isActive: z.boolean()
+  isActive: z.boolean(),
+  imageUrls: imageUrlsSchema,
+  imageIdsToRemove: removedImageIdsSchema
 });

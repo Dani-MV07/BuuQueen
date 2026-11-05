@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import CategoryForm from '../features/CategoryForm';
 import ErrorState from '../../../components/shared/ErrorState';
 import categoryService from '../services/categoryService';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function CategoryCreate() {
   const navigate = useNavigate();
@@ -13,9 +14,19 @@ export default function CategoryCreate() {
     setSubmitting(true);
     setError('');
     try {
-      await categoryService.create(data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'Category',
+        saveResource: categoryService.create
+      });
       navigate('/categories');
     } catch (err) {
+      if (err.resourceSaved?._id) {
+        navigate(`/categories/${err.resourceSaved._id}/edit`, {
+          state: { notice: err.message }
+        });
+        return;
+      }
       setError(err.message);
     } finally {
       setSubmitting(false);

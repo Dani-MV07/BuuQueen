@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation as useRouteLocation, useNavigate, useParams } from 'react-router-dom';
 import ErrorState from '../../../components/shared/ErrorState';
 import Skeleton from '../../../components/shared/Skeleton';
 import UserForm from '../features/UserForm';
 import roleService from '../../roles/services/roleService';
 import userService from '../services/userService';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function UserEdit() {
   const { id } = useParams();
+  const routeLocation = useRouteLocation();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [submitError, setSubmitError] = useState('');
+  const [submitError, setSubmitError] = useState(routeLocation.state?.notice ?? '');
   const [submitting, setSubmitting] = useState(false);
   useEffect(() => {
     let active = true;
@@ -31,7 +33,11 @@ export default function UserEdit() {
     setSubmitting(true);
     setSubmitError('');
     try {
-      await userService.update(id, data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'User',
+        saveResource: payload => userService.update(id, payload)
+      });
       navigate('/users');
     } catch (err) {
       setSubmitError(err.message);

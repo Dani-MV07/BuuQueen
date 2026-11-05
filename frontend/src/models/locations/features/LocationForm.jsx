@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import ImageUrlsField from '../../../components/shared/ImageUrlsField';
 import { locationSchema } from './locationSchema';
 
 const statuses = [['active', 'Activo'], ['inactive', 'Inactivo'], ['draft', 'Borrador'], ['archived', 'Archivado']];
@@ -15,12 +16,14 @@ function getValues(location) {
     longitude: location?.coordinates?.[1] ?? '',
     description: location?.description ?? '',
     status: location?.status ?? 'active',
-    isActive: location?.isActive !== false
+    isActive: location?.isActive !== false,
+    imageUrls: [],
+    imageIdsToRemove: []
   };
 }
 
 export default function LocationForm({ initialValues, onSubmit, submitting }) {
-  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
+  const { register, control, handleSubmit, reset, watch, formState: { errors } } = useForm({
     resolver: zodResolver(locationSchema),
     defaultValues: getValues(initialValues)
   });
@@ -59,6 +62,7 @@ export default function LocationForm({ initialValues, onSubmit, submitting }) {
           </label>
         </div>
       </section>
+      <ImageUrlsField control={control} register={register} errors={errors} images={initialValues?.images} disabled={submitting} />
       <section className="form-section publication-section">
         <div className="form-section-heading"><span className="form-section-number">02</span><div><h2>Publicación</h2><p>Configura el estado y la disponibilidad de la ubicación.</p></div></div>
         <div className="category-publication-grid">

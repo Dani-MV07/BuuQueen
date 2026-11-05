@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation as useRouteLocation, useNavigate, useParams } from 'react-router-dom';
 import AccommodationForm from '../features/AccommodationForm';
 import ErrorState from '../../../components/shared/ErrorState';
 import Skeleton from '../../../components/shared/Skeleton';
@@ -8,16 +8,18 @@ import { useAccommodations } from '../hooks/useAccommodations';
 import { useCategories } from '../../categories/hooks/useCategories';
 import { useHosts } from '../../hosts/hooks/useHosts';
 import { useLocations } from '../../locations/hooks/useLocations';
+import { saveResourceWithImages } from '../../../utils/saveResourceWithImages';
 
 export default function AccommodationEdit() {
   const { id } = useParams();
+  const routeLocation = useRouteLocation();
   const navigate = useNavigate();
   const { accommodation, loading, error: loadError } = useAccommodation(id);
   const { updateAccommodation } = useAccommodations();
   const { categories, loading: categoriesLoading, error: categoriesError, reload: reloadCategories } = useCategories();
   const { locations, loading: locationsLoading, error: locationsError, reload: reloadLocations } = useLocations();
   const { hosts, loading: hostsLoading, error: hostsError, reload: reloadHosts } = useHosts();
-  const [error, setError] = useState('');
+  const [error, setError] = useState(routeLocation.state?.notice ?? '');
   const [submitting, setSubmitting] = useState(false);
   const loadingOptions = categoriesLoading || locationsLoading || hostsLoading;
   const optionsError = [categoriesError, locationsError, hostsError].filter(Boolean).join(' ');
@@ -26,7 +28,11 @@ export default function AccommodationEdit() {
     setSubmitting(true);
     setError('');
     try {
-      await updateAccommodation(id, data);
+      await saveResourceWithImages({
+        data,
+        entityType: 'Accommodation',
+        saveResource: payload => updateAccommodation(id, payload)
+      });
       navigate('/accommodations');
     } catch (err) {
       setError(err.message);

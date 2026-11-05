@@ -42,4 +42,12 @@ Los recursos están disponibles en:
 - `/api/users`
 - `/api/variants`
 
+### Imágenes por módulo
+
+Se pueden añadir imágenes individualmente mediante POST /api/images o varias en una
+petición mediante POST /api/images/bulk. Cada imagen se guarda como un registro
+independiente con su propia URL e identificador. Se admiten alojamientos, categorías,
+anfitriones, ubicaciones, usuarios y variantes; los roles no admiten imágenes.
+Consulta postman.md para ver los formatos de petición.
+
 Cada recurso ofrece listado de activos (`GET /`), listado de eliminados (`GET /deleted`), consulta por slug (`GET /slug/:slug`) o ID (`GET /:id`), creación (`POST /`), actualización (`PATCH /:id`), cambio de estado activo (`PATCH /:id/is-active`), cambio de estado (`PATCH /:id/status`), restauración (`PATCH /:id/restore`) y borrado lógico (`DELETE /:id`). Los listados aceptan filtros exactos mediante parámetros de consulta. Los slugs se generan automáticamente a partir de los datos propios de cada recurso. Consulta `postman.md` y `http://localhost:3000/api-docs` para más información.

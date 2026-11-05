@@ -25,7 +25,7 @@ variantSchema.virtual('images', {
   ref: 'Image',
   localField: '_id',
   foreignField: 'entity_id',
-  match: { entity_type: 'Variant' }
+  match: { entity_type: 'Variant', deletedAt: null }
 });
 
 export const VariantModel = model('Variant', variantSchema);

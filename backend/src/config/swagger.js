@@ -14,6 +14,42 @@ const swaggerDocument = {
     }
   ],
   paths: {
+    '/images': {
+      post: {
+        summary: 'Añadir una imagen por URL a un módulo',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/ImageInput' }
+            }
+          }
+        },
+        responses: {
+          '201': { description: 'Imagen creada.' },
+          '400': { description: 'Datos de entrada no válidos.' },
+          '404': { description: 'Módulo asociado no encontrado.' }
+        }
+      }
+    },
+    '/images/bulk': {
+      post: {
+        summary: 'Añadir varias imágenes por URL a un módulo',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/ImageBatchInput' }
+            }
+          }
+        },
+        responses: {
+          '201': { description: 'Imágenes creadas.' },
+          '400': { description: 'Datos de entrada no válidos.' },
+          '404': { description: 'Módulo asociado no encontrado.' }
+        }
+      }
+    },
     '/accommodations': {
       get: {
         summary: 'Obtener todos los alojamientos',
@@ -74,6 +110,35 @@ const swaggerDocument = {
   },
   components: {
     schemas: {
+      ImageInput: {
+        type: 'object',
+        required: ['entity_type', 'entity_id', 'url_image'],
+        properties: {
+          entity_type: {
+            type: 'string',
+            enum: ['Accommodation', 'Category', 'Host', 'Location', 'User', 'Variant']
+          },
+          entity_id: { type: 'string', format: 'objectId' },
+          url_image: { type: 'string', format: 'uri', example: 'https://example.com/image.jpg' }
+        }
+      },
+      ImageBatchInput: {
+        type: 'object',
+        required: ['entity_type', 'entity_id', 'urls'],
+        properties: {
+          entity_type: {
+            type: 'string',
+            enum: ['Accommodation', 'Category', 'Host', 'Location', 'User', 'Variant']
+          },
+          entity_id: { type: 'string', format: 'objectId' },
+          urls: {
+            type: 'array',
+            minItems: 1,
+            maxItems: 20,
+            items: { type: 'string', format: 'uri' }
+          }
+        }
+      },
       AccommodationInput: {
         type: 'object',
         required: ['title', 'category_id', 'location_id', 'host_id'],

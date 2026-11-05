@@ -35,7 +35,7 @@ locationSchema.virtual('images', {
   ref: 'Image',
   localField: '_id',
   foreignField: 'entity_id',
-  match: { entity_type: 'Location' }
+  match: { entity_type: 'Location', deletedAt: null }
 });
 
 export const LocationModel = model('Location', locationSchema);

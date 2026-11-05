@@ -26,7 +26,7 @@ categorySchema.virtual('images', {
   ref: 'Image',
   localField: '_id',
   foreignField: 'entity_id',
-  match: { entity_type: 'Category' }
+  match: { entity_type: 'Category', deletedAt: null }
 });
 
 export const CategoryModel = model('Category', categorySchema);

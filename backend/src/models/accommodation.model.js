@@ -68,7 +68,7 @@ accommodationSchema.virtual('images', {
   ref: 'Image',
   localField: '_id',
   foreignField: 'entity_id',
-  match: { entity_type: 'Accommodation' }
+  match: { entity_type: 'Accommodation', deletedAt: null }
 });
 
 accommodationSchema.pre('validate', async function () {

@@ -28,7 +28,7 @@ userSchema.virtual('images', {
   ref: 'Image',
   localField: '_id',
   foreignField: 'entity_id',
-  match: { entity_type: 'User' }
+  match: { entity_type: 'User', deletedAt: null }
 });
 
 export const UserModel = model('User', userSchema);

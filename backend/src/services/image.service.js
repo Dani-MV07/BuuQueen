@@ -3,7 +3,6 @@ import { CategoryRepository } from '../repositories/category.repository.js';
 import { HostRepository } from '../repositories/host.repository.js';
 import { ImageRepository } from '../repositories/image.repository.js';
 import { LocationRepository } from '../repositories/location.repository.js';
-import { RoleRepository } from '../repositories/role.repository.js';
 import { UserRepository } from '../repositories/user.repository.js';
 import { VariantRepository } from '../repositories/variant.repository.js';
 import AppError from '../utils/app-error.js';
@@ -24,10 +23,20 @@ export class ImageService extends ResourceService {
       Category: new CategoryRepository(),
       Host: new HostRepository(),
       Location: new LocationRepository(),
-      Role: new RoleRepository(),
       User: new UserRepository(),
       Variant: new VariantRepository()
     };
+  }
+
+  async createMany({ entity_type, entity_id, urls }) {
+    await this.validateRelations({ entity_type, entity_id });
+
+    const images = [];
+    for (const url_image of urls) {
+      images.push(await this.create({ entity_type, entity_id, url_image }));
+    }
+
+    return images;
   }
 
   async validateRelations(data, current) {

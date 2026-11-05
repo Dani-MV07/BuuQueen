@@ -5,10 +5,24 @@ const imageSchema = new Schema(
     entity_type: {
       type: String,
       required: true,
-      enum: ['Accommodation', 'Category', 'Host', 'Location', 'Role', 'User', 'Variant']
+      enum: ['Accommodation', 'Category', 'Host', 'Location', 'User', 'Variant']
     },
     entity_id: { type: Schema.Types.ObjectId, refPath: 'entity_type', required: true },
-    url_image: { type: String, required: true, trim: true },
+    url_image: {
+      type: String,
+      required: true,
+      trim: true,
+      validate: {
+        validator: value => {
+          try {
+            return ['http:', 'https:'].includes(new URL(value).protocol);
+          } catch {
+            return false;
+          }
+        },
+        message: 'Image URL must use HTTP or HTTPS.'
+      }
+    },
     slug: { type: String, required: true, unique: true, trim: true },
     status: { type: String, required: true, trim: true, default: 'active' },
     isActive: { type: Boolean, default: true },

@@ -27,7 +27,7 @@ hostSchema.virtual('images', {
   ref: 'Image',
   localField: '_id',
   foreignField: 'entity_id',
-  match: { entity_type: 'Host' }
+  match: { entity_type: 'Host', deletedAt: null }
 });
 
 export const HostModel = model('Host', hostSchema);

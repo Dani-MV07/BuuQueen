@@ -877,8 +877,9 @@ textarea {
   min-width: 0;
   gap: 8px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fbfcfe;
+  border-radius: 4px;
+  background: var(--paper);
+  box-shadow: 0 1px 4px rgba(0, 35, 85, 0.08);
   padding: 9px;
 }
 
@@ -887,8 +888,8 @@ textarea {
   overflow: hidden;
   aspect-ratio: 4 / 3;
   border: 1px solid var(--line);
-  border-radius: 7px;
-  background: #f2f6fc;
+  border-radius: 4px;
+  background: var(--sand);
 }
 
 .image-url-preview img {
@@ -899,7 +900,7 @@ textarea {
 }
 
 .image-url-card > strong {
-  color: #263246;
+  color: var(--ink);
   font-size: 0.76rem;
 }
 
@@ -957,11 +958,11 @@ textarea {
   min-width: 132px;
   min-height: 42px;
   border-radius: 7px;
-  background: #3f5848;
+  background: var(--teal);
 }
 
 .image-url-submit:hover {
-  background: #314638;
+  background: var(--teal-dark);
 }
 
 .image-url-remove-all {

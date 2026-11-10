@@ -1,7 +1,9 @@
 import { AccommodationRepository } from '../repositories/accommodation.repository.js';
 import { CategoryRepository } from '../repositories/category.repository.js';
 import { HostRepository } from '../repositories/host.repository.js';
+import { ImageRepository } from '../repositories/image.repository.js';
 import { LocationRepository } from '../repositories/location.repository.js';
+import { VariantRepository } from '../repositories/variant.repository.js';
 import { ResourceService } from './resource.service.js';
 
 export class AccommodationService extends ResourceService {
@@ -26,7 +28,14 @@ export class AccommodationService extends ResourceService {
           required: true
         }
       },
-      { slugSource: (data) => data.title, slugFields: ['title'] }
+      {
+        slugSource: (data) => data.title,
+        slugFields: ['title'],
+        references: [
+          { repository: new VariantRepository(), field: 'accommodation_id', label: 'variantes' },
+          { repository: new ImageRepository(), field: 'entity_id', filter: { entity_type: 'Accommodation' }, label: 'imágenes' }
+        ]
+      }
     );
   }
 

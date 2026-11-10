@@ -1,6 +1,5 @@
 import { RoleRepository } from '../repositories/role.repository.js';
 import { HostRepository } from '../repositories/host.repository.js';
-import { ImageRepository } from '../repositories/image.repository.js';
 import { UserRepository } from '../repositories/user.repository.js';
 import { ResourceService } from './resource.service.js';
 
@@ -12,8 +11,7 @@ export class UserService extends ResourceService {
       slugSource: (data) => data.name,
       slugFields: ['name'],
       references: [
-        { repository: new HostRepository(), field: 'user_id', label: 'anfitriones' },
-        { repository: new ImageRepository(), field: 'entity_id', filter: { entity_type: 'User' }, label: 'imágenes' }
+        { repository: new HostRepository(), field: 'user_id', label: 'anfitriones' }
       ]
     });
   }

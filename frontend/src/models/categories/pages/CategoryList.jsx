@@ -192,9 +192,9 @@ export default function CategoryList() {
                     <td>
                       <div className="accommodation-name category-name">
                         <strong>{category.name}</strong>
-                        <span title={category.description || ''}>
-                          {category.description || 'Sin descripción'}
-                        </span>
+                        {category.description?.trim() && (
+                          <span title={category.description.trim()}>{category.description.trim()}</span>
+                        )}
                       </div>
                     </td>
                     <td className="accommodation-date">{formatCreatedDate(category.createdAt)}</td>

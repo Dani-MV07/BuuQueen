@@ -51,6 +51,18 @@ export class BaseRepository {
     }
   }
 
+  async existsByReference(field, id, filter = {}) {
+    try {
+      return Boolean(await this.model.exists({
+        ...filter,
+        [field]: id,
+        deletedAt: null
+      }));
+    } catch (error) {
+      throw handleServiceError(error);
+    }
+  }
+
   async findBySlug(slug) {
     try {
       return await this.populateQuery(this.model.findOne({ slug, deletedAt: null }));

@@ -7,6 +7,7 @@ export class ResourceService {
     this.repository = repository;
     this.resourceName = resourceName;
     this.relations = relations;
+    this.references = options.references || [];
     this.slugSource = options.slugSource;
     this.slugFields = options.slugFields || [];
     this.slugMaxLength = options.slugMaxLength || 300;
@@ -100,6 +101,9 @@ export class ResourceService {
 
     const effective = { ...current, ...data };
     await this.validateRelations(effective, current);
+    if (data.isActive === false && current.isActive !== false) {
+      await this.#validateNoActiveReferences(id, 'desactivar');
+    }
     const rebuildSlug = this.slugFields.some((field) => Object.hasOwn(data, field));
     const reservedSlugs = new Set();
     let resource;
@@ -143,12 +147,14 @@ export class ResourceService {
     if (current.deletedAt) {
       return { alreadyDeleted: true };
     }
+    await this.#validateNoActiveReferences(id, 'eliminar');
     await this.repository.softDelete(id);
     return { alreadyDeleted: false };
   }
 
   async softDelete(id) {
-    this.#validateObjectId(id);
+    await this.#getCurrent(id);
+    await this.#validateNoActiveReferences(id, 'eliminar');
     const resource = await this.repository.softDelete(id);
     if (!resource) {
       throw this.#notFound();
@@ -200,6 +206,23 @@ export class ResourceService {
       this.#validateObjectId(id, `El campo ${field} debe ser un ObjectId válido.`);
       if (!(await repository.findById(id))) {
         throw new AppError(`${label} no encontrado.`, 404);
+      }
+    }
+  }
+
+  async #validateNoActiveReferences(id, action) {
+    for (const reference of this.references) {
+      const hasReference = await reference.repository.existsByReference(
+        reference.field,
+        id,
+        reference.filter
+      );
+
+      if (hasReference) {
+        throw new AppError(
+          `No se puede ${action} ${this.resourceName} porque tiene ${reference.label} activos.`,
+          409
+        );
       }
     }
   }

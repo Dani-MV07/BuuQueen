@@ -9,10 +9,12 @@ import { confirmAction } from '../../../utils/SweetAlert';
 const statuses = new Map([['available', 'Disponible'], ['unavailable', 'No disponible'], ['draft', 'Borrador'], ['archived', 'Archivado']]);
 const dateLabel = (value) => value && !Number.isNaN(new Date(value).getTime()) ? new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value)) : '—';
 const title = (variant) => variant.sku || 'Variante';
+const formatPrice = (price) => new Intl.NumberFormat('es-ES', {
+  style: 'currency',
+  currency: 'EUR'
+}).format(price);
 const subtitle = (variant) => [
-  variant.accommodation_id?.title,
-  Number.isFinite(variant.price) ? `${variant.price} €` : '',
-  `${variant.stock ?? 0} unidades · ${variant.capacity ?? 1} plazas`
+  variant.accommodation_id?.title ? `Alojamiento: ${variant.accommodation_id.title}` : '',
 ].filter(Boolean).join(' · ');
 
 export default function VariantList() {
@@ -53,8 +55,12 @@ export default function VariantList() {
       <header className="dashboard-heading"><div><p className="eyebrow">GESTIÓN DEL CATÁLOGO</p><h1>Variantes</h1><p className="dashboard-subtitle">Administra precios, stock y capacidad de cada alojamiento.</p></div><Link className="button create-button" to="/variants/new"><span aria-hidden="true">＋</span> Crear variante</Link></header>
       {actionError && <div className="alert error" role="alert">{actionError}</div>}{error && <ErrorState message={error} onRetry={reload} />}
       {loading ? <Skeleton rows={4} /> : error ? null : variants.length === 0 ? <div className="empty-state"><span className="empty-icon" aria-hidden="true">◇</span><h2>Aún no hay variantes</h2><p>Crea una variante para un alojamiento.</p><Link className="button" to="/variants/new">Crear variante</Link></div> : (
-        <div className="table-scroll"><table className="accommodations-table management-table"><thead><tr><th>Variante</th><th>Fecha de alta</th><th>Estado</th><th>Disponibilidad</th><th>Acciones</th></tr></thead><tbody>{variants.map((variant) => <tr key={variant._id}>
-          <td><div className="accommodation-name"><strong>{title(variant)}</strong><span>{subtitle(variant)}</span></div></td><td className="accommodation-date">{dateLabel(variant.createdAt)}</td>
+        <div className="table-scroll"><table className="accommodations-table management-table details-table variant-details-table"><thead><tr><th>Variante</th><th>Precio</th><th>Stock</th><th>Plazas</th><th>Fecha de alta</th><th>Estado</th><th>Disponibilidad</th><th>Acciones</th></tr></thead><tbody>{variants.map((variant) => <tr key={variant._id}>
+          <td><div className="accommodation-name"><strong>{title(variant)}</strong><span>{subtitle(variant)}</span></div></td>
+          <td className="accommodation-date">{Number.isFinite(variant.price) ? formatPrice(variant.price) : '—'}</td>
+          <td className="accommodation-date">{Number.isFinite(variant.stock) ? variant.stock : '—'}</td>
+          <td className="accommodation-date">{Number.isFinite(variant.capacity) ? variant.capacity : '—'}</td>
+          <td className="accommodation-date">{dateLabel(variant.createdAt)}</td>
           <td><button className="status-badge" type="button" onClick={() => changeStatus(variant)} disabled={pending[`${variant._id}:status`]}>{pending[`${variant._id}:status`] ? 'Guardando…' : statuses.get(variant.status) || variant.status || 'Sin estado'}</button></td>
           <td><button className={`active-badge ${variant.isActive ? 'is-active' : 'is-inactive'}`} type="button" onClick={() => perform(variant, 'active', () => variantService.setActive(variant._id, !variant.isActive))} disabled={pending[`${variant._id}:active`]}>{pending[`${variant._id}:active`] ? 'Guardando…' : variant.isActive ? 'Disponible' : 'No disponible'}</button></td>
           <td><div className="row-actions"><Link className="icon-button edit-action" to={`/variants/${variant._id}/edit`} aria-label={`Editar ${title(variant)}`}>✎</Link><button className="icon-button delete-action" type="button" onClick={() => remove(variant)} disabled={pending[`${variant._id}:delete`]} aria-label={`Eliminar ${title(variant)}`}>⌫</button></div></td>
@@ -62,7 +68,7 @@ export default function VariantList() {
       )}
       <section className="deleted-section"><header className="deleted-heading"><div><h2>Variantes eliminadas</h2><p>Puedes recuperar las variantes eliminadas.</p></div><span className="deleted-count">{deleted.length}</span></header>
         {deletedError && <div className="alert error" role="alert">{deletedError}</div>}
-        {deleted.length > 0 && <div className="table-scroll"><table className="accommodations-table deleted-table"><thead><tr><th>Variante</th><th>Eliminada</th><th>Acciones</th></tr></thead><tbody>{deleted.map((variant) => <tr key={variant._id}><td><strong>{title(variant)}</strong></td><td className="accommodation-date">{dateLabel(variant.deletedAt)}</td><td><button className="button restore-button" type="button" onClick={() => perform(variant, 'restore', () => variantService.restore(variant._id))} disabled={pending[`${variant._id}:restore`]}>{pending[`${variant._id}:restore`] ? 'Recuperando…' : 'Recuperar variante'}</button></td></tr>)}</tbody></table></div>}
+        {deleted.length > 0 && <div className="table-scroll"><table className="accommodations-table deleted-table details-table variant-details-table"><thead><tr><th>Variante</th><th>Precio</th><th>Stock</th><th>Plazas</th><th>Eliminada</th><th>Acciones</th></tr></thead><tbody>{deleted.map((variant) => <tr key={variant._id}><td><strong>{title(variant)}</strong></td><td className="accommodation-date">{Number.isFinite(variant.price) ? formatPrice(variant.price) : '—'}</td><td className="accommodation-date">{Number.isFinite(variant.stock) ? variant.stock : '—'}</td><td className="accommodation-date">{Number.isFinite(variant.capacity) ? variant.capacity : '—'}</td><td className="accommodation-date">{dateLabel(variant.deletedAt)}</td><td><button className="button restore-button" type="button" onClick={() => perform(variant, 'restore', () => variantService.restore(variant._id))} disabled={pending[`${variant._id}:restore`]}>{pending[`${variant._id}:restore`] ? 'Recuperando…' : 'Recuperar variante'}</button></td></tr>)}</tbody></table></div>}
       </section>
     </div></section>
   );

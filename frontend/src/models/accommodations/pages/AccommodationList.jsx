@@ -153,10 +153,12 @@ export default function AccommodationList() {
           </div>
         ) : (
           <div className="table-scroll">
-            <table className="accommodations-table">
+            <table className="accommodations-table details-table accommodation-details-table">
               <thead>
                 <tr>
                   <th scope="col">Nombre</th>
+                  <th scope="col">Categoría</th>
+                  <th scope="col">Anfitrión</th>
                   <th scope="col">Fecha de alta</th>
                   <th scope="col">Estado</th>
                   <th scope="col">Disponibilidad</th>
@@ -169,9 +171,10 @@ export default function AccommodationList() {
                     <td>
                       <div className="accommodation-name">
                         <strong>{accommodation.title}</strong>
-                        <span>{accommodation.city}</span>
                       </div>
                     </td>
+                    <td className="table-detail">{accommodation.category_id?.name || '—'}</td>
+                    <td className="table-detail">{accommodation.host_id?.user_id?.name || '—'}</td>
                     <td className="accommodation-date">{formatCreatedDate(accommodation.createdAt)}</td>
                     <td>
                       <button
@@ -240,10 +243,12 @@ export default function AccommodationList() {
           {deletedError && <div className="alert error" role="alert">{deletedError}</div>}
           {deletedAccommodations.length > 0 && (
             <div className="table-scroll">
-              <table className="accommodations-table deleted-table">
+              <table className="accommodations-table deleted-table details-table accommodation-details-table">
                 <thead>
                   <tr>
                     <th scope="col">Nombre</th>
+                    <th scope="col">Categoría</th>
+                    <th scope="col">Anfitrión</th>
                     <th scope="col">Fecha de eliminación</th>
                     <th scope="col">Acciones</th>
                   </tr>
@@ -254,9 +259,10 @@ export default function AccommodationList() {
                       <td>
                         <div className="accommodation-name">
                           <strong>{accommodation.title}</strong>
-                          <span>{accommodation.city}</span>
                         </div>
                       </td>
+                      <td className="table-detail">{accommodation.category_id?.name || '—'}</td>
+                      <td className="table-detail">{accommodation.host_id?.user_id?.name || '—'}</td>
                       <td className="accommodation-date">{formatCreatedDate(accommodation.deletedAt)}</td>
                       <td>
                         <button

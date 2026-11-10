@@ -608,6 +608,25 @@ button.active-badge.is-inactive:hover:not(:disabled) {
   min-width: 760px;
 }
 
+.accommodations-table.details-table {
+  min-width: 930px;
+}
+
+.accommodations-table.accommodation-details-table {
+  min-width: 1120px;
+}
+
+.accommodations-table.variant-details-table {
+  min-width: 1160px;
+}
+
+.table-detail {
+  max-width: 260px;
+  color: #444;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
 .management-status-field {
   display: grid;
   max-width: 360px;

@@ -289,13 +289,15 @@ h2 {
 }
 
 .table-scroll {
-  overflow-x: auto;
+  overflow-x: hidden;
   border: 1px solid var(--line);
   border-radius: 4px;
 }
 
 .accommodations-table {
   width: 100%;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
   text-align: left;
 }
@@ -303,8 +305,10 @@ h2 {
 .accommodations-table th,
 .accommodations-table td {
   border-bottom: 1px solid var(--line);
+  min-width: 0;
   padding: 13px 12px;
   vertical-align: middle;
+  overflow-wrap: anywhere;
 }
 
 .accommodations-table th {
@@ -312,7 +316,6 @@ h2 {
   color: #333;
   font-size: 0.75rem;
   font-weight: 700;
-  white-space: nowrap;
 }
 
 .accommodations-table th:first-child {
@@ -333,7 +336,7 @@ h2 {
 
 .accommodation-name {
   display: grid;
-  min-width: 160px;
+  min-width: 0;
   gap: 2px;
 }
 
@@ -354,7 +357,6 @@ h2 {
 .accommodation-date {
   color: #444;
   font-size: 0.73rem;
-  white-space: nowrap;
 }
 
 .status-badge,
@@ -370,7 +372,6 @@ h2 {
   font-size: 0.68rem;
   font-weight: 700;
   padding: 5px 10px;
-  white-space: nowrap;
 }
 
 .status-badge {
@@ -413,6 +414,7 @@ button.active-badge.is-inactive:hover:not(:disabled) {
 
 .row-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
 }
@@ -529,7 +531,7 @@ button.active-badge.is-inactive:hover:not(:disabled) {
 }
 
 .deleted-table {
-  min-width: 520px;
+  min-width: 0;
 }
 
 .restore-button {
@@ -601,23 +603,23 @@ button.active-badge.is-inactive:hover:not(:disabled) {
 }
 
 .categories-table {
-  min-width: 760px;
+  min-width: 0;
 }
 
 .management-table {
-  min-width: 760px;
+  min-width: 0;
 }
 
 .accommodations-table.details-table {
-  min-width: 930px;
+  min-width: 0;
 }
 
 .accommodations-table.accommodation-details-table {
-  min-width: 1120px;
+  min-width: 0;
 }
 
 .accommodations-table.variant-details-table {
-  min-width: 1160px;
+  min-width: 0;
 }
 
 .table-detail {
@@ -1342,10 +1344,6 @@ textarea {
     align-self: flex-start;
   }
 
-  .accommodations-table {
-    min-width: 690px;
-  }
-
   .form-grid {
     grid-template-columns: 1fr;
   }
@@ -1414,10 +1412,6 @@ textarea {
   .category-publication-grid {
     grid-template-columns: 1fr;
     gap: 19px;
-  }
-
-  .management-table {
-    min-width: 760px;
   }
 
   .form-section-heading {

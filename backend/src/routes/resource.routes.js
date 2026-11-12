@@ -4,7 +4,7 @@ import { validateRequest } from '../middlewares/validation.middleware.js';
 
 const objectId = z.string().regex(/^[a-f\d]{24}$/i, 'El ID debe ser un ObjectId válido.');
 
-export const createResourceRouter = (controller, fields) => {
+export const createResourceRouter = (controller, fields, createFields = {}) => {
   const router = Router();
   const idParams = z.object({
     params: z.object({
@@ -17,7 +17,7 @@ export const createResourceRouter = (controller, fields) => {
     })
   });
   const createSchema = z.object({
-    body: z.object(fields)
+    body: z.object({ ...fields, ...createFields })
   });
   const updateSchema = z.object({
     ...idParams.shape,

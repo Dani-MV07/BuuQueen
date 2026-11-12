@@ -18,6 +18,7 @@ npm install
 ```
 
 2. Configurar variables de entorno copiando `.env.example` a `.env`.
+	Sustituye `JWT_SECRET` por un secreto aleatorio largo antes de ejecutar la API.
 
 3. Cargar los datos iniciales de roles, usuarios, categorías, ubicaciones, anfitriones, alojamientos, variantes e imágenes:
 ```bash
@@ -34,6 +35,7 @@ npm run dev
 Los recursos están disponibles en:
 
 - `/api/accommodations`
+- `/api/auth`
 - `/api/categories`
 - `/api/hosts`
 - `/api/images`
@@ -51,3 +53,7 @@ anfitriones, ubicaciones, usuarios y variantes; los roles no admiten imágenes.
 Consulta postman.md para ver los formatos de petición.
 
 Cada recurso ofrece listado de activos (`GET /`), listado de eliminados (`GET /deleted`), consulta por slug (`GET /slug/:slug`) o ID (`GET /:id`), creación (`POST /`), actualización (`PATCH /:id`), cambio de estado activo (`PATCH /:id/is-active`), cambio de estado (`PATCH /:id/status`), restauración (`PATCH /:id/restore`) y borrado lógico (`DELETE /:id`). Los listados aceptan filtros exactos mediante parámetros de consulta. Los slugs se generan automáticamente a partir de los datos propios de cada recurso. Consulta `postman.md` y `http://localhost:3000/api-docs` para más información.
+
+### Autenticación
+
+Se puede incluir `password` (entre 8 y 128 caracteres) al crear un usuario mediante `POST /api/users`; se almacena como hash Argon2. Para iniciar sesión, envía `POST /api/auth/login` con `email` y `password`. La respuesta contiene un JWT, los datos públicos del usuario y su perfil si existe. El token usa el tiempo de expiración de `JWT_EXPIRES_IN` (por defecto, `1h`).

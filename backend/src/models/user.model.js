@@ -4,6 +4,7 @@ const userSchema = new Schema(
   {
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, trim: true, lowercase: true },
+    passwordHash: { type: String, select: false },
     description: { type: String, trim: true, maxlength: [2000, 'Máximo 2000 caracteres.'], default: '' },
     role_id: { type: Schema.Types.ObjectId, ref: 'Role', required: true },
     slug: { type: String, required: true, unique: true, trim: true },
@@ -14,8 +15,20 @@ const userSchema = new Schema(
   {
     timestamps: true,
     versionKey: false,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toJSON: {
+      virtuals: true,
+      transform: (document, result) => {
+        delete result.passwordHash;
+        return result;
+      }
+    },
+    toObject: {
+      virtuals: true,
+      transform: (document, result) => {
+        delete result.passwordHash;
+        return result;
+      }
+    }
   }
 );
 
@@ -29,6 +42,12 @@ userSchema.virtual('images', {
   localField: '_id',
   foreignField: 'entity_id',
   match: { entity_type: 'User', deletedAt: null }
+});
+userSchema.virtual('profile', {
+  ref: 'Profile',
+  localField: '_id',
+  foreignField: 'user_id',
+  justOne: true
 });
 
 export const UserModel = model('User', userSchema);

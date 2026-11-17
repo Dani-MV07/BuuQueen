@@ -1,8 +1,17 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthContext';
 
 export default function Layout() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const categorySectionActive = pathname === '/categories' || /^\/categories\/[^/]+\/edit$/.test(pathname);
+  const displayName = user?.name || user?.email || 'Cuenta activa';
+
+  async function handleLogout() {
+    await logout();
+    navigate('/login', { replace: true });
+  }
 
   return (
     <div className="admin-shell">
@@ -36,11 +45,14 @@ export default function Layout() {
           </NavLink>
         </nav>
         <div className="sidebar-footer">
-          <div className="profile-avatar" aria-hidden="true">B</div>
-          <div>
-            <strong>Administración</strong>
-            <span>Gestión del catálogo</span>
+          <div className="profile-avatar" aria-hidden="true">{displayName.charAt(0).toUpperCase()}</div>
+          <div className="sidebar-user-copy">
+            <strong title={displayName}>{displayName}</strong>
+            <span>{user?.role_id?.name || user?.role_id?.slug || 'Sesión activa'}</span>
           </div>
+          <button className="sidebar-logout" type="button" onClick={handleLogout} aria-label="Cerrar sesión" title="Cerrar sesión">
+            <span aria-hidden="true">↪</span>
+          </button>
         </div>
       </aside>
       <main className="admin-main">

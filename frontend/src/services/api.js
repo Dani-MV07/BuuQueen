@@ -1,12 +1,16 @@
+import { getAuthToken } from '../utils/authStorage';
+
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace(/\/$/, '');
 
 export async function request(path, options = {}) {
+  const token = getAuthToken();
   const response = await fetch(`${API_URL}${path}`, {
+    ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers || {})
-    },
-    ...options
+    }
   });
 
   if (!response.ok) {
@@ -58,4 +62,15 @@ export const locationsApi = {
 
 export const hostsApi = {
   list: () => request('/hosts')
+};
+
+export const authApi = {
+  login: (credentials) => request('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(credentials)
+  }),
+  logout: (token) => request('/auth/logout', {
+    method: 'POST',
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  })
 };

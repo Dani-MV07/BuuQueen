@@ -9,5 +9,16 @@ export const AuthController = {
         } catch (error) {
             next(error);
         }
+    },
+    logout: async (req, res, next) => {
+        try {
+            res.json(await authService.logout({
+                token: req.authToken,
+                userId: req.user.id,
+                expiresAt: req.authExpiresAt
+            }));
+        } catch (error) {
+            next(error);
+        }
     }
 };

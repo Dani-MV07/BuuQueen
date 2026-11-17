@@ -8,6 +8,7 @@ import { LocationModel } from './models/location.model.js';
 import { RoleModel } from './models/role.model.js';
 import { UserModel } from './models/user.model.js';
 import { VariantModel } from './models/variant.model.js';
+import { hashPassword } from './utils/password.util.js';
 
 dotenv.config();
 
@@ -32,29 +33,34 @@ const seed = async () => {
       { name: 'Guest', description: 'Usuario que puede reservar alojamientos', slug: 'guest' }
     ]);
     const roleByName = Object.fromEntries(roles.map(role => [role.slug, role]));
+    const seedPasswordHash = await hashPassword('BuuQueen123!');
 
     const users = await UserModel.insertMany([
       {
         name: 'Admin BuuQueen',
         email: 'admin@buuqueen.local',
+        passwordHash: seedPasswordHash,
         role_id: roleByName.admin._id,
         slug: 'admin-buuqueen'
       },
       {
         name: 'María Pérez',
         email: 'maria.perez@buuqueen.local',
+        passwordHash: seedPasswordHash,
         role_id: roleByName.host._id,
         slug: 'maria-perez'
       },
       {
         name: 'Jordi Soler',
         email: 'jordi.soler@buuqueen.local',
+        passwordHash: seedPasswordHash,
         role_id: roleByName.host._id,
         slug: 'jordi-soler'
       },
       {
         name: 'Clara Martín',
         email: 'clara.martin@buuqueen.local',
+        passwordHash: seedPasswordHash,
         role_id: roleByName.guest._id,
         slug: 'clara-martin'
       }

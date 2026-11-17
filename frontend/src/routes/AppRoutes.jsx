@@ -2,6 +2,8 @@ import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Skeleton from '../components/shared/Skeleton';
 import Layout from '../components/layout/Layout';
+import LoginPage from '../auth/LoginPage';
+import RequireAuth from '../auth/RequireAuth';
 
 const AccommodationCreate = lazy(() => import('../models/accommodations/pages/AccommodationCreate'));
 const AccommodationEdit = lazy(() => import('../models/accommodations/pages/AccommodationEdit'));
@@ -29,7 +31,8 @@ export default function AppRoutes() {
   return (
     <Suspense fallback={<Skeleton />}>
       <Routes>
-        <Route element={<Layout />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route element={<RequireAuth><Layout /></RequireAuth>}>
           <Route index element={<Navigate to="/accommodations" replace />} />
           <Route path="/accommodations" element={<AccommodationList />} />
           <Route path="/accommodations/new" element={<AccommodationCreate />} />

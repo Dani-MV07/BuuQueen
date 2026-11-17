@@ -1,13 +1,15 @@
 import { AuthRepository } from '../repositories/auth.repository.js';
 import { ProfileRepository } from '../repositories/profile.repository.js';
+import { RevokeTokenRepository } from '../repositories/revoke-token.repository.js';
 import AppError from '../utils/app-error.js';
-import { signJwt } from '../utils/jwt.util.js';
+import { hashJwt, signJwt } from '../utils/jwt.util.js';
 import { verifyPassword } from '../utils/password.util.js';
 
 export class AuthService {
     constructor() {
         this.authRepository = new AuthRepository();
         this.profileRepository = new ProfileRepository();
+        this.revokeTokenRepository = new RevokeTokenRepository();
     }
 
     async login({ email, password }) {
@@ -35,5 +37,19 @@ export class AuthService {
         );
 
         return { token, user, profile: profile || null };
+    }
+
+    async logout({ token, userId, expiresAt }) {
+        if (!token || !userId || !Number.isInteger(expiresAt)) {
+            throw new AppError('El token de sesión no es válido.', 400);
+        }
+
+        await this.revokeTokenRepository.revokeToken({
+            tokenHash: hashJwt(token),
+            userId,
+            expiresAt: new Date(expiresAt * 1000)
+        });
+
+        return { message: 'Sesión cerrada correctamente.' };
     }
 }

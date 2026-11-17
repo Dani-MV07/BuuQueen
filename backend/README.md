@@ -58,6 +58,8 @@ Cada recurso ofrece listado de activos (`GET /`), listado de eliminados (`GET /d
 
 Se puede incluir `password` (entre 8 y 128 caracteres) al crear un usuario mediante `POST /api/users`; se almacena como hash Argon2. Para iniciar sesión, envía `POST /api/auth/login` con `email` y `password`. La respuesta contiene un JWT, los datos públicos del usuario y su perfil si existe. El token usa el tiempo de expiración de `JWT_EXPIRES_IN` (por defecto, `1h`).
 
+Los endpoints de recursos requieren un token Bearer de un usuario con rol `admin`. El inicio de sesión es público y cerrar sesión requiere un token válido.
+
 Las cuentas creadas por `npm run seed` usan todas la contraseña de desarrollo `BuuQueen123!`:
 `admin@buuqueen.local`, `maria.perez@buuqueen.local`, `jordi.soler@buuqueen.local` y `clara.martin@buuqueen.local`.
 

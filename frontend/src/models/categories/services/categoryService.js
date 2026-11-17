@@ -1,4 +1,4 @@
-import { categoriesApi } from '../../../services/api';
+import { categoriesApi } from '../../../services/apiService';
 import { normalizeError } from '../../../utils/errorHandler';
 
 async function runRequest(request, fallbackMessage) {

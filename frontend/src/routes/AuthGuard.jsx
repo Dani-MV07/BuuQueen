@@ -1,7 +1,7 @@
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
-export default function RequireAuth({ children }) {
+export default function AuthGuard() {
     const location = useLocation();
     const { isAuthenticated } = useAuth();
 
@@ -9,5 +9,5 @@ export default function RequireAuth({ children }) {
         return <Navigate to="/login" replace state={{ from: location }} />;
     }
 
-    return children;
+    return <Outlet />;
 }

@@ -3,7 +3,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Skeleton from '../components/shared/Skeleton';
 import Layout from '../components/layout/Layout';
 import LoginPage from '../auth/LoginPage';
-import RequireAuth from '../auth/RequireAuth';
+import AdminGuard from './AdminGuard';
+import AuthGuard from './AuthGuard';
 
 const AccommodationCreate = lazy(() => import('../models/accommodations/pages/AccommodationCreate'));
 const AccommodationEdit = lazy(() => import('../models/accommodations/pages/AccommodationEdit'));
@@ -32,30 +33,34 @@ export default function AppRoutes() {
     <Suspense fallback={<Skeleton />}>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route element={<RequireAuth><Layout /></RequireAuth>}>
-          <Route index element={<Navigate to="/accommodations" replace />} />
-          <Route path="/accommodations" element={<AccommodationList />} />
-          <Route path="/accommodations/new" element={<AccommodationCreate />} />
-          <Route path="/accommodations/:id/edit" element={<AccommodationEdit />} />
-          <Route path="/categories" element={<CategoryList />} />
-          <Route path="/categories/new" element={<CategoryCreate />} />
-          <Route path="/categories/:id/edit" element={<CategoryEdit />} />
-          <Route path="/hosts" element={<HostList />} />
-          <Route path="/hosts/new" element={<HostCreate />} />
-          <Route path="/hosts/:id/edit" element={<HostEdit />} />
-          <Route path="/locations" element={<LocationList />} />
-          <Route path="/locations/new" element={<LocationCreate />} />
-          <Route path="/locations/:id/edit" element={<LocationEdit />} />
-          <Route path="/roles" element={<RoleList />} />
-          <Route path="/roles/new" element={<RoleCreate />} />
-          <Route path="/roles/:id/edit" element={<RoleEdit />} />
-          <Route path="/users" element={<UserList />} />
-          <Route path="/users/new" element={<UserCreate />} />
-          <Route path="/users/:id/edit" element={<UserEdit />} />
-          <Route path="/variants" element={<VariantList />} />
-          <Route path="/variants/new" element={<VariantCreate />} />
-          <Route path="/variants/:id/edit" element={<VariantEdit />} />
-          <Route path="*" element={<Navigate to="/accommodations" replace />} />
+        <Route element={<AuthGuard />}>
+          <Route element={<AdminGuard />}>
+            <Route element={<Layout />}>
+              <Route index element={<Navigate to="/accommodations" replace />} />
+              <Route path="/accommodations" element={<AccommodationList />} />
+              <Route path="/accommodations/new" element={<AccommodationCreate />} />
+              <Route path="/accommodations/:id/edit" element={<AccommodationEdit />} />
+              <Route path="/categories" element={<CategoryList />} />
+              <Route path="/categories/new" element={<CategoryCreate />} />
+              <Route path="/categories/:id/edit" element={<CategoryEdit />} />
+              <Route path="/hosts" element={<HostList />} />
+              <Route path="/hosts/new" element={<HostCreate />} />
+              <Route path="/hosts/:id/edit" element={<HostEdit />} />
+              <Route path="/locations" element={<LocationList />} />
+              <Route path="/locations/new" element={<LocationCreate />} />
+              <Route path="/locations/:id/edit" element={<LocationEdit />} />
+              <Route path="/roles" element={<RoleList />} />
+              <Route path="/roles/new" element={<RoleCreate />} />
+              <Route path="/roles/:id/edit" element={<RoleEdit />} />
+              <Route path="/users" element={<UserList />} />
+              <Route path="/users/new" element={<UserCreate />} />
+              <Route path="/users/:id/edit" element={<UserEdit />} />
+              <Route path="/variants" element={<VariantList />} />
+              <Route path="/variants/new" element={<VariantCreate />} />
+              <Route path="/variants/:id/edit" element={<VariantEdit />} />
+              <Route path="*" element={<Navigate to="/accommodations" replace />} />
+            </Route>
+          </Route>
         </Route>
       </Routes>
     </Suspense>

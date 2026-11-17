@@ -1,4 +1,4 @@
-import { request } from './api';
+import { request } from './apiService';
 import { normalizeError } from '../utils/errorHandler';
 
 export async function addManyImages(entityType, entityId, urls) {

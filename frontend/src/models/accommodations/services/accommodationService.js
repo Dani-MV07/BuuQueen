@@ -1,4 +1,4 @@
-import { request } from '../../../services/api';
+import { request } from '../../../services/apiService';
 import { normalizeError } from '../../../utils/errorHandler';
 
 async function runRequest(request, fallbackMessage) {

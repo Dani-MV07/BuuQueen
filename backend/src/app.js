@@ -14,6 +14,7 @@ import profileRoutes from './routes/profile.routes.js';
 import roleRoutes from './routes/role.routes.js';
 import userRoutes from './routes/user.routes.js';
 import variantRoutes from './routes/variant.routes.js';
+import { PROFILE_AVATAR_DIRECTORY } from './services/profile-avatar-storage.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { authenticate } from './middlewares/authenticate.middleware.js';
 import { authorizeRoles } from './middlewares/authorize.middleware.js';
@@ -30,7 +31,11 @@ connectDB();
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
-app.use(express.json());
+app.use(express.json({ limit: '3mb' }));
+app.use('/uploads/profile-avatars', (req, res, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+}, express.static(PROFILE_AVATAR_DIRECTORY));
 
 app.use('/api-docs', serveSwagger, setupSwagger);
 

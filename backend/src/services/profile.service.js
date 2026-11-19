@@ -2,8 +2,9 @@ import mongoose from 'mongoose';
 import { ProfileRepository } from '../repositories/profile.repository.js';
 import { UserRepository } from '../repositories/user.repository.js';
 import AppError from '../utils/app-error.js';
+import { saveProfileAvatar } from './profile-avatar-storage.js';
 
-const profileFields = ['phone', 'bio'];
+const profileFields = ['phone', 'bio', 'avatar'];
 
 export class ProfileService {
     constructor() {
@@ -44,12 +45,21 @@ export class ProfileService {
         if (!await this.userRepository.findById(userId)) {
             throw new AppError('No se encontró el usuario asociado.', 404);
         }
-        if (await this.repository.existsByReference('user_id', userId)) {
+        const existingProfile = await this.repository.findByUserIdIncludingDeleted(userId);
+        if (existingProfile) {
+            if (existingProfile.deletedAt) {
+                throw new AppError('El usuario tiene un perfil eliminado; recupéralo antes de crear otro.', 409);
+            }
             throw new AppError('El usuario ya tiene un perfil.', 409);
         }
 
+        const data = { ...payload };
+        if (Object.hasOwn(data, 'avatar')) {
+            data.avatar = await saveProfileAvatar(userId, data.avatar);
+        }
+
         try {
-            return await this.repository.create(payload);
+            return await this.repository.create(data);
         } catch (error) {
             if (error.code === 11000) {
                 throw new AppError('El usuario ya tiene un perfil.', 409);
@@ -67,6 +77,12 @@ export class ProfileService {
         );
         if (!Object.keys(data).length) {
             throw new AppError('Debe proporcionar al menos un campo para actualizar.', 400);
+        }
+
+        if (Object.hasOwn(data, 'avatar')) {
+            const current = await this.repository.findById(id);
+            if (!current) throw this.#notFound();
+            data.avatar = await saveProfileAvatar(current.user_id?._id || current.user_id, data.avatar);
         }
 
         const profile = await this.repository.update(id, data);

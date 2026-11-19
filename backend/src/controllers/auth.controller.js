@@ -10,6 +10,20 @@ export const AuthController = {
             next(error);
         }
     },
+    getMyProfile: async (req, res, next) => {
+        try {
+            res.json(await authService.getMyProfile(req.user.id));
+        } catch (error) {
+            next(error);
+        }
+    },
+    updateMyProfile: async (req, res, next) => {
+        try {
+            res.json(await authService.updateMyProfile(req.user.id, req.body));
+        } catch (error) {
+            next(error);
+        }
+    },
     logout: async (req, res, next) => {
         try {
             res.json(await authService.logout({

@@ -16,4 +16,14 @@ export class ProfileRepository extends BaseRepository {
             throw handleServiceError(error);
         }
     }
+
+    async findByUserIdIncludingDeleted(userId) {
+        try {
+            return await this.populateQuery(
+                this.model.findOne({ user_id: userId })
+            );
+        } catch (error) {
+            throw handleServiceError(error);
+        }
+    }
 }

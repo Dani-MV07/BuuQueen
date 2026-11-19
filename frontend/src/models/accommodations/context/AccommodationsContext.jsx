@@ -1,16 +1,20 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import { useAuth } from '../../../auth/AuthContext';
 import accommodationService from '../services/accommodationService';
 
 export const AccommodationsContext = createContext(null);
 
 export function AccommodationsProvider({ children }) {
+  const { isAdmin } = useAuth();
   const [accommodations, setAccommodations] = useState([]);
   const [deletedAccommodations, setDeletedAccommodations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deletedError, setDeletedError] = useState('');
+  const requestIdRef = useRef(0);
 
   const loadAccommodations = useCallback(async ({ showLoading = true } = {}) => {
+    const requestId = ++requestIdRef.current;
     if (showLoading) setLoading(true);
     setError('');
     setDeletedError('');
@@ -18,6 +22,8 @@ export function AccommodationsProvider({ children }) {
       accommodationService.list(),
       accommodationService.listDeleted()
     ]);
+
+    if (requestId !== requestIdRef.current) return;
 
     if (activeResult.status === 'fulfilled') {
       setAccommodations(activeResult.value);
@@ -31,12 +37,22 @@ export function AccommodationsProvider({ children }) {
       setDeletedError(deletedResult.reason.message);
     }
 
-    if (showLoading) setLoading(false);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
+    if (!isAdmin) {
+      requestIdRef.current += 1;
+      setAccommodations([]);
+      setDeletedAccommodations([]);
+      setLoading(false);
+      setError('');
+      setDeletedError('');
+      return;
+    }
+
     loadAccommodations();
-  }, [loadAccommodations]);
+  }, [isAdmin, loadAccommodations]);
 
   const value = {
     accommodations,

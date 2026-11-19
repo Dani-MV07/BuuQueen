@@ -3,9 +3,11 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Skeleton from '../components/shared/Skeleton';
 import Layout from '../components/layout/Layout';
 import LoginPage from '../auth/LoginPage';
+import { useAuth } from '../auth/AuthContext';
 import AdminGuard from './AdminGuard';
 import AuthGuard from './AuthGuard';
 
+const MyProfilePage = lazy(() => import('../models/users/pages/MyProfilePage'));
 const AccommodationCreate = lazy(() => import('../models/accommodations/pages/AccommodationCreate'));
 const AccommodationEdit = lazy(() => import('../models/accommodations/pages/AccommodationEdit'));
 const AccommodationList = lazy(() => import('../models/accommodations/pages/AccommodationList'));
@@ -27,6 +29,14 @@ const UserList = lazy(() => import('../models/users/pages/UserListPage'));
 const VariantCreate = lazy(() => import('../models/variants/pages/VariantCreate'));
 const VariantEdit = lazy(() => import('../models/variants/pages/VariantEdit'));
 const VariantList = lazy(() => import('../models/variants/pages/VariantListPage'));
+const ProfileCreate = lazy(() => import('../models/profiles/pages/ProfileCreate'));
+const ProfileEdit = lazy(() => import('../models/profiles/pages/ProfileEdit'));
+const ProfileList = lazy(() => import('../models/profiles/pages/ProfileListPage'));
+
+function HomeRedirect() {
+  const { isAdmin } = useAuth();
+  return <Navigate to={isAdmin ? '/accommodations' : '/profile'} replace />;
+}
 
 export default function AppRoutes() {
   return (
@@ -34,9 +44,10 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<AuthGuard />}>
-          <Route element={<AdminGuard />}>
-            <Route element={<Layout />}>
-              <Route index element={<Navigate to="/accommodations" replace />} />
+          <Route element={<Layout />}>
+            <Route index element={<HomeRedirect />} />
+            <Route path="/profile" element={<MyProfilePage />} />
+            <Route element={<AdminGuard />}>
               <Route path="/accommodations" element={<AccommodationList />} />
               <Route path="/accommodations/new" element={<AccommodationCreate />} />
               <Route path="/accommodations/:id/edit" element={<AccommodationEdit />} />
@@ -55,11 +66,14 @@ export default function AppRoutes() {
               <Route path="/users" element={<UserList />} />
               <Route path="/users/new" element={<UserCreate />} />
               <Route path="/users/:id/edit" element={<UserEdit />} />
+              <Route path="/profiles" element={<ProfileList />} />
+              <Route path="/profiles/new" element={<ProfileCreate />} />
+              <Route path="/profiles/:id/edit" element={<ProfileEdit />} />
               <Route path="/variants" element={<VariantList />} />
               <Route path="/variants/new" element={<VariantCreate />} />
               <Route path="/variants/:id/edit" element={<VariantEdit />} />
-              <Route path="*" element={<Navigate to="/accommodations" replace />} />
             </Route>
+            <Route path="*" element={<HomeRedirect />} />
           </Route>
         </Route>
       </Routes>

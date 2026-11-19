@@ -5,7 +5,7 @@ import { useAuth } from './AuthContext';
 export default function LoginPage() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { isAuthenticated, login } = useAuth();
+    const { isAuthenticated, isAdmin, login } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -13,7 +13,7 @@ export default function LoginPage() {
     const destination = location.state?.from?.pathname || '/accommodations';
 
     if (isAuthenticated) {
-        return <Navigate to={destination} replace />;
+        return <Navigate to={isAdmin ? destination : '/profile'} replace />;
     }
 
     async function handleSubmit(event) {
@@ -22,8 +22,11 @@ export default function LoginPage() {
         setSubmitting(true);
 
         try {
-            await login({ email, password });
-            navigate(destination, { replace: true });
+            const session = await login({ email, password });
+            const role = session?.user?.role_id;
+            const roleName = role?.slug || role?.name || session?.user?.role;
+            const loggedInAsAdmin = typeof roleName === 'string' && roleName.toLowerCase() === 'admin';
+            navigate(loggedInAsAdmin ? destination : '/profile', { replace: true });
         } catch (loginError) {
             setError(loginError.message || 'No se pudo iniciar sesión.');
         } finally {

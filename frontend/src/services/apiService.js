@@ -2,6 +2,12 @@ import { getAuthToken } from '../utils/authStorage';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace(/\/$/, '');
 
+export function resolveAssetUrl(value) {
+  if (!value || /^(?:https?:|data:)/i.test(value)) return value || '';
+  const apiOrigin = new URL(API_URL, window.location.origin).origin;
+  return `${apiOrigin}${value.startsWith('/') ? value : `/${value}`}`;
+}
+
 export async function request(path, options = {}) {
   const token = getAuthToken();
   const response = await fetch(`${API_URL}${path}`, {
@@ -68,6 +74,11 @@ export const authApi = {
   login: (credentials) => request('/auth/login', {
     method: 'POST',
     body: JSON.stringify(credentials)
+  }),
+  getMyProfile: () => request('/auth/me/profile'),
+  updateMyProfile: (data) => request('/auth/me/profile', {
+    method: 'PATCH',
+    body: JSON.stringify(data)
   }),
   logout: (token) => request('/auth/logout', {
     method: 'POST',

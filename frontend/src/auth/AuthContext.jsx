@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 import { authApi } from '../services/apiService';
 import { clearAuthSession, readAuthSession, saveAuthSession } from '../utils/authStorage';
 
@@ -15,6 +15,32 @@ export function AuthProvider({ children }) {
         saveAuthSession(nextSession);
         setSession(nextSession);
         return nextSession;
+    }
+
+    const refreshMyProfile = useCallback(async () => {
+        const token = session?.token;
+        if (!token) return null;
+
+        const profileData = await authApi.getMyProfile();
+        const storedSession = readAuthSession();
+        if (storedSession?.token !== token) return null;
+
+        const nextSession = { ...storedSession, user: profileData.user, profile: profileData.profile };
+        saveAuthSession(nextSession);
+        setSession(nextSession);
+        return profileData;
+    }, [session?.token]);
+
+    async function updateMyProfile(data) {
+        const token = session?.token;
+        const profileData = await authApi.updateMyProfile(data);
+        const storedSession = readAuthSession();
+        if (token && storedSession?.token === token) {
+            const nextSession = { ...storedSession, user: profileData.user, profile: profileData.profile };
+            saveAuthSession(nextSession);
+            setSession(nextSession);
+        }
+        return profileData;
     }
 
     function logout() {
@@ -35,6 +61,8 @@ export function AuthProvider({ children }) {
             isAuthenticated: Boolean(session?.token),
             isAdmin,
             login,
+            refreshMyProfile,
+            updateMyProfile,
             logout
         }}>
             {children}

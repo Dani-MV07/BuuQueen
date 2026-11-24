@@ -20,7 +20,9 @@ export default function Layout({ children }) {
       <div className="admin-shell">
         <aside className="sidebar">
           <NavLink to="/accommodations" className="brand">
-            <img className="brand-icon" src="/buuqueen-icon.png" alt="" />
+            <span className="brand-mark" aria-hidden="true">
+              <img className="brand-icon" src="/buuqueen-icon.png" alt="" />
+            </span>
             <span className="brand-copy">
               <span className="brand-kicker">BUUQUEEN</span>
               <span className="brand-name">Admin Dashboard</span>

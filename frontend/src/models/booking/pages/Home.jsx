@@ -33,8 +33,8 @@ export default function Home() {
     <section className="booking-page">
       <header className="booking-hero">
         <p className="eyebrow">BUUQUEEN · ESCAPADAS CON ENCANTO</p>
-        <h1>Encuentra tu próximo lugar favorito</h1>
-        <p>Explora alojamientos únicos y prepara una estancia a tu medida.</p>
+        <h1>Encuentra tu próxima <span>aventura</span></h1>
+        <p>Estancias con personalidad, lugares memorables y todo lo que necesitas para desconectar.</p>
         <Search value={query} onChange={setQuery} onSubmit={search} />
       </header>
 

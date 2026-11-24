@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { resolveAssetUrl } from '../../../services/apiService';
 
-export default function CatalogCard({ item, kind, title, description, to }) {
+export default function CatalogCard({ item, title, description, to }) {
   const image = item.images?.find((entry) => entry?.url_image)?.url_image;
   const content = (
     <>
@@ -11,7 +11,6 @@ export default function CatalogCard({ item, kind, title, description, to }) {
           : <span aria-hidden="true">✦</span>}
       </div>
       <div className="booking-catalog-copy">
-        <p className="booking-product-meta">{kind}</p>
         <h3>{title}</h3>
         {description && <p>{description}</p>}
       </div>

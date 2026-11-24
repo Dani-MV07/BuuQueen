@@ -80,7 +80,6 @@ export default function Home() {
                   <CatalogCard
                     key={category._id}
                     item={category}
-                    kind="Categoría"
                     title={category.name}
                     description={category.description}
                     to={`/booking/shop?q=${encodeURIComponent(category.name)}`}
@@ -105,7 +104,6 @@ export default function Home() {
                   <CatalogCard
                     key={host._id}
                     item={host}
-                    kind="Anfitrión"
                     title={host.name}
                     description={host.bio || host.description}
                   />
@@ -129,7 +127,6 @@ export default function Home() {
                   <CatalogCard
                     key={location._id}
                     item={location}
-                    kind="Destino"
                     title={location.name}
                     description={location.description}
                     to={`/booking/shop?q=${encodeURIComponent(location.city)}`}

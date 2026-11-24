@@ -1,11 +1,50 @@
 import { AccommodationService } from '../services/accommodation.service.js';
 
 const service = new AccommodationService();
+const isAdmin = (user) => user?.role === 'admin';
+const isBookable = (accommodation) => (
+  accommodation.isActive !== false && accommodation.status === 'published'
+);
+
+function toBookingProduct(accommodation) {
+  const product = accommodation.toObject ? accommodation.toObject() : accommodation;
+  return {
+    _id: product._id,
+    title: product.title,
+    description: product.description,
+    slug: product.slug,
+    status: product.status,
+    isActive: product.isActive,
+    category_id: product.category_id && {
+      name: product.category_id.name,
+      slug: product.category_id.slug
+    },
+    location_id: product.location_id && {
+      city: product.location_id.city,
+      country: product.location_id.country,
+      name: [product.location_id.city, product.location_id.country].filter(Boolean).join(', ')
+    },
+    images: (product.images || [])
+      .filter((image) => image.isActive !== false && image.status === 'active')
+      .map(({ _id, url_image }) => ({ _id, url_image })),
+    variants: (product.variants || [])
+      .filter((variant) => (
+        (variant.deletedAt === null || variant.deletedAt === undefined)
+        && variant.isActive !== false
+        && variant.status === 'available'
+        && variant.stock > 0
+      ))
+      .map(({ _id, price, capacity, description }) => ({ _id, price, capacity, description }))
+  };
+}
 
 export class AccommodationController {
   static async getAll(req, res, next) {
     try {
-      res.json(await service.getAllAccommodations(req.query));
+      const accommodations = await service.getAllAccommodations(req.query);
+      res.json(isAdmin(req.user) ? accommodations : accommodations
+        .filter(isBookable)
+        .map(toBookingProduct));
     } catch (error) {
       next(error);
     }
@@ -29,7 +68,14 @@ export class AccommodationController {
 
   static async getBySlug(req, res, next) {
     try {
-      res.json(await service.getAccommodationBySlug(req.params.slug));
+      const accommodation = await service.getAccommodationBySlug(req.params.slug);
+      if (isAdmin(req.user)) {
+        return res.json(accommodation);
+      }
+      if (!isBookable(accommodation)) {
+        return res.status(404).json({ message: 'No se encontró el alojamiento.' });
+      }
+      return res.json(toBookingProduct(accommodation));
     } catch (error) {
       next(error);
     }

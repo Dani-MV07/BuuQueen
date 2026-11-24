@@ -6,8 +6,9 @@ import LoginPage from '../auth/LoginPage';
 import { useAuth } from '../auth/AuthContext';
 import AdminGuard from './AdminGuard';
 import AuthGuard from './AuthGuard';
+import ProfileRoute from './ProfileRoute';
+import BookingLayout from '../models/booking/components/BookingLayout';
 
-const MyProfilePage = lazy(() => import('../models/users/pages/MyProfilePage'));
 const AccommodationCreate = lazy(() => import('../models/accommodations/pages/AccommodationCreate'));
 const AccommodationEdit = lazy(() => import('../models/accommodations/pages/AccommodationEdit'));
 const AccommodationList = lazy(() => import('../models/accommodations/pages/AccommodationList'));
@@ -32,10 +33,13 @@ const VariantList = lazy(() => import('../models/variants/pages/VariantListPage'
 const ProfileCreate = lazy(() => import('../models/profiles/pages/ProfileCreate'));
 const ProfileEdit = lazy(() => import('../models/profiles/pages/ProfileEdit'));
 const ProfileList = lazy(() => import('../models/profiles/pages/ProfileListPage'));
+const BookingHome = lazy(() => import('../models/booking/pages/Home'));
+const BookingShop = lazy(() => import('../models/booking/pages/Shop'));
+const BookingDetails = lazy(() => import('../models/booking/pages/Details'));
 
 function HomeRedirect() {
   const { isAdmin } = useAuth();
-  return <Navigate to={isAdmin ? '/accommodations' : '/profile'} replace />;
+  return <Navigate to={isAdmin ? '/accommodations' : '/booking'} replace />;
 }
 
 export default function AppRoutes() {
@@ -44,10 +48,15 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<AuthGuard />}>
-          <Route element={<Layout />}>
-            <Route index element={<HomeRedirect />} />
-            <Route path="/profile" element={<MyProfilePage />} />
-            <Route element={<AdminGuard />}>
+          <Route index element={<HomeRedirect />} />
+          <Route path="/profile" element={<ProfileRoute />} />
+          <Route element={<BookingLayout />}>
+            <Route path="/booking" element={<BookingHome />} />
+            <Route path="/booking/shop" element={<BookingShop />} />
+            <Route path="/booking/:slug" element={<BookingDetails />} />
+          </Route>
+          <Route element={<AdminGuard />}>
+            <Route element={<Layout />}>
               <Route path="/accommodations" element={<AccommodationList />} />
               <Route path="/accommodations/new" element={<AccommodationCreate />} />
               <Route path="/accommodations/:id/edit" element={<AccommodationEdit />} />
@@ -73,8 +82,8 @@ export default function AppRoutes() {
               <Route path="/variants/new" element={<VariantCreate />} />
               <Route path="/variants/:id/edit" element={<VariantEdit />} />
             </Route>
-            <Route path="*" element={<HomeRedirect />} />
           </Route>
+          <Route path="*" element={<HomeRedirect />} />
         </Route>
       </Routes>
     </Suspense>

@@ -13,7 +13,7 @@ export default function LoginPage() {
     const destination = location.state?.from?.pathname || '/accommodations';
 
     if (isAuthenticated) {
-        return <Navigate to={isAdmin ? destination : '/profile'} replace />;
+        return <Navigate to={isAdmin ? destination : '/booking'} replace />;
     }
 
     async function handleSubmit(event) {
@@ -26,7 +26,7 @@ export default function LoginPage() {
             const role = session?.user?.role_id;
             const roleName = role?.slug || role?.name || session?.user?.role;
             const loggedInAsAdmin = typeof roleName === 'string' && roleName.toLowerCase() === 'admin';
-            navigate(loggedInAsAdmin ? destination : '/profile', { replace: true });
+            navigate(loggedInAsAdmin ? destination : '/booking', { replace: true });
         } catch (loginError) {
             setError(loginError.message || 'No se pudo iniciar sesión.');
         } finally {
@@ -39,11 +39,11 @@ export default function LoginPage() {
             <section className="login-panel" aria-labelledby="login-title">
                 <header className="login-brand">
                     <span className="login-mark" aria-hidden="true">B</span>
-                    <span><strong>BUUQUEEN</strong><small>ADMINISTRACIÓN</small></span>
+                    <span><strong>BUUQUEEN</strong><small>ALOJAMIENTOS Y ESTANCIAS</small></span>
                 </header>
                 <p className="login-eyebrow">ACCESO DE CUENTA</p>
                 <h1 id="login-title">Bienvenido de nuevo</h1>
-                <p className="login-subtitle">Entra para continuar con la gestión.</p>
+                <p className="login-subtitle">Inicia sesión para continuar con tu cuenta.</p>
 
                 <form className="login-form" onSubmit={handleSubmit}>
                     <label>
@@ -75,7 +75,7 @@ export default function LoginPage() {
                         {!submitting && <span aria-hidden="true">→</span>}
                     </button>
                 </form>
-                <footer className="login-footer">BUUQUEEN <span>·</span> Panel de gestión</footer>
+                <footer className="login-footer">BUUQUEEN <span>·</span> Tu próxima estancia empieza aquí</footer>
             </section>
         </main>
     );

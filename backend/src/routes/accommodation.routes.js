@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { AccommodationController } from '../controllers/accommodation.controller.js';
 import { validateRequest } from '../middlewares/validation.middleware.js';
+import { authorizeRoles } from '../middlewares/authorize.middleware.js';
 
 const router = Router();
 
@@ -67,14 +68,14 @@ const statusSchema = z.object({
 });
 
 router.get('/', AccommodationController.getAll);
-router.get('/deleted', AccommodationController.getDeleted);
+router.get('/deleted', authorizeRoles('admin'), AccommodationController.getDeleted);
 router.get('/slug/:slug', validateRequest(slugSchema), AccommodationController.getBySlug);
-router.get('/:id', validateRequest(idParams), AccommodationController.getById);
-router.post('/', validateRequest(createSchema), AccommodationController.create);
-router.patch('/:id', validateRequest(updateSchema), AccommodationController.update);
-router.patch('/:id/is-active', validateRequest(isActiveSchema), AccommodationController.changeIsActive);
-router.patch('/:id/status', validateRequest(statusSchema), AccommodationController.changeStatus);
-router.patch('/:id/restore', validateRequest(idParams), AccommodationController.restoreDelete);
-router.delete('/:id', validateRequest(idParams), AccommodationController.softDelete);
+router.get('/:id', authorizeRoles('admin'), validateRequest(idParams), AccommodationController.getById);
+router.post('/', authorizeRoles('admin'), validateRequest(createSchema), AccommodationController.create);
+router.patch('/:id', authorizeRoles('admin'), validateRequest(updateSchema), AccommodationController.update);
+router.patch('/:id/is-active', authorizeRoles('admin'), validateRequest(isActiveSchema), AccommodationController.changeIsActive);
+router.patch('/:id/status', authorizeRoles('admin'), validateRequest(statusSchema), AccommodationController.changeStatus);
+router.patch('/:id/restore', authorizeRoles('admin'), validateRequest(idParams), AccommodationController.restoreDelete);
+router.delete('/:id', authorizeRoles('admin'), validateRequest(idParams), AccommodationController.softDelete);
 
 export default router;

@@ -9,7 +9,7 @@ export default function AdminGuard() {
         return <Navigate to="/login" replace state={{ from: location }} />;
     }
 
-    if (!isAdmin) return <Navigate to="/profile" replace />;
+    if (!isAdmin) return <Navigate to="/booking" replace />;
 
     return <Outlet />;
 }

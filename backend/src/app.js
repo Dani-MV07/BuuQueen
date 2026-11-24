@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import { connectDB } from './config/db.js';
 import authRoutes from './routes/auth.routes.js';
 import accommodationRoutes from './routes/accommodation.routes.js';
+import bookingRoutes from './routes/booking.routes.js';
 import categoryRoutes from './routes/category.routes.js';
 import hostRoutes from './routes/host.routes.js';
 import imageRoutes from './routes/image.routes.js';
@@ -40,7 +41,8 @@ app.use('/uploads/profile-avatars', (req, res, next) => {
 app.use('/api-docs', serveSwagger, setupSwagger);
 
 app.use('/api/auth', authRoutes);
-app.use('/api/accommodations', ...adminAccess, accommodationRoutes);
+app.use('/api/booking', authenticate, bookingRoutes);
+app.use('/api/accommodations', authenticate, accommodationRoutes);
 app.use('/api/categories', ...adminAccess, categoryRoutes);
 app.use('/api/hosts', ...adminAccess, hostRoutes);
 app.use('/api/images', ...adminAccess, imageRoutes);

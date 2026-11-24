@@ -1,5 +1,14 @@
+@font-face {
+  font-family: Oxanium;
+  src: url('/fonts/oxanium-variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+
 :root {
   font-family: Arial, Helvetica, sans-serif;
+  --font-display: Oxanium, Arial, sans-serif;
   color: #1a1a1a;
   background: #f5f5f5;
   font-synthesis: none;
@@ -102,6 +111,7 @@ a {
 }
 
 .eyebrow {
+  font-family: var(--font-display);
   color: var(--teal);
   font-size: 0.64rem;
   font-weight: 800;
@@ -117,6 +127,20 @@ a {
 .sidebar-section-label {
   margin: 0 10px 10px;
   font-size: 0.6rem;
+}
+
+.brand-kicker,
+.brand-name,
+.booking-brand-copy,
+.booking-nav a,
+.booking-text-link,
+.booking-product-meta,
+.booking-product-link,
+.booking-logout,
+.login-eyebrow,
+.editor-mode,
+.button {
+  font-family: var(--font-display);
 }
 
 .sidebar-nav {
@@ -371,9 +395,16 @@ p {
 }
 
 h1,
-h2 {
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
   color: var(--ink);
   line-height: 1.2;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
 }
 
 .dashboard-heading h1,

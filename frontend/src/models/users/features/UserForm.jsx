@@ -26,7 +26,17 @@ export default function UserForm({ initialValues, roles, onSubmit, submitting })
     defaultValues: getValues(initialValues)
   });
   useEffect(() => reset(getValues(initialValues)), [initialValues, reset]);
+  const hasProfile = Boolean(initialValues?.profile);
   const isActive = watch('isActive');
+  const availabilityRegistration = register('isActive');
+  const availableStatuses = hasProfile
+    ? [...new Map([
+      ['active', 'Activo'],
+      ...(initialValues.status && initialValues.status !== 'active'
+        ? [[initialValues.status, `Mantener estado actual: ${initialValues.status}`]]
+        : [])
+    ])]
+    : statuses;
 
   return (
     <form className="form-panel accommodation-form management-form" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -43,9 +53,10 @@ export default function UserForm({ initialValues, roles, onSubmit, submitting })
       <section className="form-section publication-section">
         <div className="form-section-heading"><span className="form-section-number">02</span><div><h2>Publicación</h2><p>Configura el estado y la disponibilidad de la cuenta.</p></div></div>
         <div className="category-publication-grid">
-          <label className="management-status-field"><span>Estado <em>*</em></span><select {...register('status')} aria-invalid={Boolean(errors.status)}>{!statuses.some(([value]) => value === initialValues?.status) && initialValues?.status && <option value={initialValues.status}>Mantener estado actual: {initialValues.status}</option>}{statuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>{errors.status && <small className="field-error">{errors.status.message}</small>}</label>
-          <label className="availability-field"><span>Disponibilidad</span><span className="availability-control"><input {...register('isActive')} className="availability-switch-input" type="checkbox" aria-label="Usuario disponible" /><span className="availability-switch" aria-hidden="true" /><span className="availability-copy">{isActive ? 'Disponible' : 'No disponible'}</span></span></label>
+          <label className="management-status-field"><span>Estado <em>*</em></span><select {...register('status')} aria-invalid={Boolean(errors.status)}>{!hasProfile && !statuses.some(([value]) => value === initialValues?.status) && initialValues?.status && <option value={initialValues.status}>Mantener estado actual: {initialValues.status}</option>}{availableStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>{errors.status && <small className="field-error">{errors.status.message}</small>}</label>
+          <label className="availability-field"><span>Disponibilidad</span><span className="availability-control"><input {...availabilityRegistration} onChange={event => { if (hasProfile && !event.target.checked) { event.target.checked = true; return; } availabilityRegistration.onChange(event); }} className="availability-switch-input" type="checkbox" aria-label="Usuario disponible" /><span className="availability-switch" aria-hidden="true" /><span className="availability-copy">{isActive ? 'Disponible' : 'No disponible'}</span></span></label>
         </div>
+        {hasProfile && <p className="profile-lock-notice">Este usuario tiene un perfil: puedes reactivarlo, pero no deshabilitarlo ni cambiarlo a otro estado.</p>}
       </section>
       <footer className="form-actions"><p><em>*</em> Campos obligatorios</p><div className="form-action-buttons"><Link className="button button-secondary" to="/users">Cancelar</Link><button className="button form-submit" disabled={submitting}><span aria-hidden="true">{submitting ? '◌' : '✓'}</span>{submitting ? 'Guardando...' : initialValues ? 'Guardar cambios' : 'Crear usuario'}</button></div></footer>
     </form>

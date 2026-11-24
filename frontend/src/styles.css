@@ -1023,6 +1023,14 @@ textarea {
   font-weight: 400;
 }
 
+.profile-lock-notice {
+  display: block;
+  margin-top: 3px;
+  color: #76520a;
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
 .image-url-section {
   display: grid;
   gap: 14px;

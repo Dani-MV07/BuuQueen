@@ -38,7 +38,7 @@ export default function LoginPage() {
         <main className="login-page">
             <section className="login-panel" aria-labelledby="login-title">
                 <header className="login-brand">
-                    <span className="login-mark" aria-hidden="true">B</span>
+                    <img className="login-mark" src="/buuqueen-icon.png" alt="" />
                     <span><strong>BUUQUEEN</strong><small>ALOJAMIENTOS Y ESTANCIAS</small></span>
                 </header>
                 <p className="login-eyebrow">ACCESO DE CUENTA</p>

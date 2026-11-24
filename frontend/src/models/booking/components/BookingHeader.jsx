@@ -14,8 +14,11 @@ export default function BookingHeader() {
   return (
     <header className="booking-header">
       <NavLink className="booking-brand" to="/booking">
-        <span>BUUQUEEN</span>
-        <strong>Estancias</strong>
+        <img className="booking-brand-icon" src="/buuqueen-icon.png" alt="" />
+        <span className="booking-brand-copy">
+          <span>BUUQUEEN</span>
+          <strong>Estancias</strong>
+        </span>
       </NavLink>
       <nav className="booking-nav" aria-label="Navegación principal">
         <NavLink end to="/booking">Inicio</NavLink>

@@ -33,13 +33,14 @@ const seed = async () => {
       { name: 'Guest', description: 'Usuario que puede reservar alojamientos', slug: 'guest' }
     ]);
     const roleByName = Object.fromEntries(roles.map(role => [role.slug, role]));
+    const seedAdminPasswordHash = await hashPassword('1234');
     const seedPasswordHash = await hashPassword('BuuQueen123!');
 
     const users = await UserModel.insertMany([
       {
         name: 'Admin BuuQueen',
         email: 'admin@buuqueen.local',
-        passwordHash: seedPasswordHash,
+        passwordHash: seedAdminPasswordHash,
         role_id: roleByName.admin._id,
         slug: 'admin-buuqueen'
       },

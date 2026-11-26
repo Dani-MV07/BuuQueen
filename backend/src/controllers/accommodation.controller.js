@@ -15,21 +15,27 @@ function toBookingProduct(accommodation) {
     slug: product.slug,
     status: product.status,
     isActive: product.isActive,
+    createdAt: product.createdAt,
     category_id: product.category_id && {
       name: product.category_id.name,
-      slug: product.category_id.slug
+      slug: product.category_id.slug,
+      description: product.category_id.description
     },
     location_id: product.location_id && {
       _id: product.location_id._id,
       city: product.location_id.city,
       country: product.location_id.country,
+      address: product.location_id.address,
+      description: product.location_id.description,
+      coordinates: product.location_id.coordinates,
       name: [product.location_id.city, product.location_id.country].filter(Boolean).join(', ')
     },
     host_id: product.host_id && {
       _id: product.host_id._id,
       name: product.host_id.user_id?.name,
       slug: product.host_id.slug,
-      bio: product.host_id.bio
+      bio: product.host_id.bio,
+      description: product.host_id.description
     },
     images: (product.images || [])
       .filter((image) => image.isActive !== false && image.status === 'active')
@@ -41,8 +47,10 @@ function toBookingProduct(accommodation) {
         && variant.status === 'available'
         && variant.stock > 0
       ))
-      .map(({ _id, price, capacity, description, stock, status, isActive }) => ({
+      .map(({ _id, sku, slug, price, capacity, description, stock, status, isActive }) => ({
         _id,
+        sku,
+        slug,
         price,
         capacity,
         description,

@@ -80,6 +80,7 @@ export default function Home() {
                   <CatalogCard
                     key={category._id}
                     item={category}
+                    fallbackImage="/images/category-fallback.jpg"
                     title={category.name}
                     description={category.description}
                     to={`/booking/shop?q=${encodeURIComponent(category.name)}`}
@@ -127,6 +128,7 @@ export default function Home() {
                   <CatalogCard
                     key={location._id}
                     item={location}
+                    fallbackImage="/images/destination-fallback.jpg"
                     title={location.name}
                     description={location.description}
                     to={`/booking/shop?q=${encodeURIComponent(location.city)}`}

@@ -6,7 +6,11 @@ export default function Carousel({ images = [], title }) {
   const [index, setIndex] = useState(0);
 
   if (!usableImages.length) {
-    return <div className="booking-carousel booking-carousel-empty" role="img" aria-label={`Sin imágenes de ${title}`} />;
+    return (
+      <div className="booking-carousel booking-carousel-empty" role="img" aria-label={`Imagen de ${title}`}>
+        <img src="/images/accommodation-fallback.jpg" alt="" />
+      </div>
+    );
   }
 
   const move = (offset) => {

@@ -11,6 +11,7 @@ function getStartingPrice(product) {
 
 export default function ProductCard({ product }) {
   const image = product.images?.find((item) => item?.url_image)?.url_image;
+  const imageSource = image ? resolveAssetUrl(image) : '/images/accommodation-fallback.jpg';
   const price = getStartingPrice(product);
   const locationName = product.location_id?.name
     || [product.location_id?.city, product.location_id?.country].filter(Boolean).join(', ');
@@ -18,9 +19,7 @@ export default function ProductCard({ product }) {
   return (
     <article className="booking-product-card">
       <Link to={`/booking/${product.slug}`} className="booking-product-image">
-        {image
-          ? <img src={resolveAssetUrl(image)} alt="" />
-          : <span aria-hidden="true">✦</span>}
+        <img src={imageSource} alt="" loading="lazy" />
       </Link>
       <div className="booking-product-copy">
         <p className="booking-product-meta">

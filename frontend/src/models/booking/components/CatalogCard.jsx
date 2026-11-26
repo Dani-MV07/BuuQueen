@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 import { resolveAssetUrl } from '../../../services/apiService';
 
-export default function CatalogCard({ item, title, description, to }) {
+export default function CatalogCard({ item, fallbackImage, title, description, to }) {
   const image = item.images?.find((entry) => entry?.url_image)?.url_image;
+  const imageSource = image ? resolveAssetUrl(image) : fallbackImage;
   const content = (
     <>
       <div className="booking-catalog-image">
-        {image
-          ? <img src={resolveAssetUrl(image)} alt="" />
+        {imageSource
+          ? <img src={imageSource} alt="" loading="lazy" />
           : <span aria-hidden="true">✦</span>}
       </div>
       <div className="booking-catalog-copy">

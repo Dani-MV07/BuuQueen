@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ErrorState from '../../../components/shared/ErrorState';
 import Skeleton from '../../../components/shared/Skeleton';
@@ -9,26 +9,96 @@ import useProdsSearch from '../hooks/useProdsSearch';
 
 const PAGE_SIZE = 6;
 
-export default function Shop() {
-  const [searchParams] = useSearchParams();
-  const { products, filters, categories, locations, hosts, priceBounds, updateFilter, loading, error } = useProdsSearch();
-  const [page, setPage] = useState(1);
-  const searchQuery = searchParams.get('q') || '';
+function getFiltersFromSearchParams(searchParams) {
+  const getPrice = (key) => {
+    const value = searchParams.get(key);
+    if (value === null || value.trim() === '') return null;
+    const price = Number(value);
+    return Number.isFinite(price) ? price : null;
+  };
 
-  useEffect(() => {
-    updateFilter('search', searchQuery);
-    setPage(1);
-  }, [searchQuery, updateFilter]);
+  return {
+    search: searchParams.get('q') || '',
+    category: searchParams.get('category') || '',
+    location: searchParams.get('location') || '',
+    host: searchParams.get('host') || '',
+    priceMin: getPrice('priceMin'),
+    priceMax: getPrice('priceMax'),
+    sort: searchParams.get('sort') || 'recommended'
+  };
+}
+
+export default function Shop() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [initialFilters] = useState(() => getFiltersFromSearchParams(searchParams));
+  const {
+    products,
+    filters,
+    categories,
+    locations,
+    hosts,
+    priceBounds,
+    updateFilter,
+    updateFilters,
+    loading,
+    error
+  } = useProdsSearch(initialFilters);
+  const [page, setPage] = useState(1);
+  const syncingFromUrl = useRef(false);
 
   useEffect(() => {
     setPage(1);
   }, [filters.search, filters.category, filters.location, filters.host, filters.priceMin, filters.priceMax, filters.sort]);
+
+  useEffect(() => {
+    syncingFromUrl.current = true;
+    updateFilters(getFiltersFromSearchParams(searchParams));
+  }, [searchParams, updateFilters]);
+
+  useEffect(() => {
+    if (syncingFromUrl.current) {
+      syncingFromUrl.current = false;
+      return;
+    }
+
+    const nextParams = new URLSearchParams(searchParams);
+    ['q', 'category', 'location', 'host', 'priceMin', 'priceMax', 'sort']
+      .forEach((key) => nextParams.delete(key));
+
+    const filtersToParams = [
+      ['q', filters.search],
+      ['category', filters.category],
+      ['location', filters.location],
+      ['host', filters.host],
+      ['priceMin', filters.priceMin],
+      ['priceMax', filters.priceMax],
+      ['sort', filters.sort === 'recommended' ? '' : filters.sort]
+    ];
+    filtersToParams.forEach(([key, value]) => {
+      if (value !== '' && value !== null && value !== undefined) {
+        nextParams.set(key, String(value));
+      }
+    });
+
+    if (nextParams.toString() !== searchParams.toString()) {
+      setSearchParams(nextParams, { replace: true });
+    }
+  }, [filters, searchParams, setSearchParams]);
 
   const pageCount = Math.max(1, Math.ceil(products.length / PAGE_SIZE));
   const visibleProducts = useMemo(
     () => products.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
     [page, products]
   );
+  const activeFiltersCount = [
+    filters.search,
+    filters.category,
+    filters.location,
+    filters.host,
+    filters.priceMin !== null,
+    filters.priceMax !== null,
+    filters.sort !== 'recommended'
+  ].filter(Boolean).length;
 
   return (
     <section className="booking-page">
@@ -41,7 +111,15 @@ export default function Shop() {
       <div className="booking-shop-layout">
         <aside className="booking-toolbar" aria-label="Filtros de alojamientos">
           <div className="booking-filter-heading">
-            <h2>Búsqueda de filtros</h2>
+            <div className="booking-filter-title">
+              <span>PERSONALIZA TU ESTANCIA</span>
+              <h2>Filtros</h2>
+            </div>
+            {activeFiltersCount > 0 && (
+              <span className="booking-filter-count" aria-label={`${activeFiltersCount} filtros activos`}>
+                {activeFiltersCount}
+              </span>
+            )}
             <button
               type="button"
               className="booking-filter-reset"
@@ -59,22 +137,39 @@ export default function Shop() {
             </button>
           </div>
           <label className="booking-inline-search">
-            <span className="visually-hidden">Buscar filtros</span>
+            <span className="visually-hidden">Buscar destino o alojamiento</span>
             <input
               type="search"
               value={filters.search}
               onChange={(event) => updateFilter('search', event.target.value)}
-              placeholder="Destino o alojamiento"
+              placeholder="Destino, alojamiento..."
             />
+            <svg className="booking-filter-search-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10.8" cy="10.8" r="6.8" />
+              <path d="m16 16 4.5 4.5" />
+            </svg>
           </label>
           <fieldset className="booking-price-filter">
-            <legend>Precio</legend>
+            <legend>Precio por noche</legend>
             <div className="booking-price-values">
-              <span>{filters.priceMin ?? priceBounds.min} €</span>
-              <span>{filters.priceMax ?? priceBounds.max} €</span>
+              <span><small>Desde</small><strong>{filters.priceMin ?? priceBounds.min} €</strong></span>
+              <span><small>Hasta</small><strong>{filters.priceMax ?? priceBounds.max} €</strong></span>
             </div>
             <div className="booking-price-range">
+              <div className="booking-price-rail" aria-hidden="true">
+                <span
+                  style={{
+                    left: `${priceBounds.max > priceBounds.min
+                      ? ((filters.priceMin ?? priceBounds.min) - priceBounds.min) / (priceBounds.max - priceBounds.min) * 100
+                      : 0}%`,
+                    right: `${priceBounds.max > priceBounds.min
+                      ? 100 - ((filters.priceMax ?? priceBounds.max) - priceBounds.min) / (priceBounds.max - priceBounds.min) * 100
+                      : 0}%`
+                  }}
+                />
+              </div>
               <input
+                className="booking-price-slider-min"
                 type="range"
                 min={priceBounds.min}
                 max={priceBounds.max}
@@ -87,6 +182,7 @@ export default function Shop() {
                 aria-label="Precio mínimo"
               />
               <input
+                className="booking-price-slider-max"
                 type="range"
                 min={priceBounds.min}
                 max={priceBounds.max}
@@ -101,7 +197,10 @@ export default function Shop() {
             </div>
           </fieldset>
           <details className="booking-filter-section" open>
-            <summary>Categoría</summary>
+            <summary>
+              <span>Categoría</span>
+              <small>{filters.category || 'Todas'}</small>
+            </summary>
             <Select
               name="booking-category"
               label="Seleccionar categoría"
@@ -113,8 +212,11 @@ export default function Shop() {
               ]}
             />
           </details>
-          <details className="booking-filter-section" open>
-            <summary>Ubicación</summary>
+          <details className="booking-filter-section">
+            <summary>
+              <span>Ubicación</span>
+              <small>{filters.location || 'Todas'}</small>
+            </summary>
             <Select
               name="booking-location"
               label="Seleccionar ubicación"
@@ -126,8 +228,11 @@ export default function Shop() {
               ]}
             />
           </details>
-          <details className="booking-filter-section" open>
-            <summary>Anfitrión</summary>
+          <details className="booking-filter-section">
+            <summary>
+              <span>Anfitrión</span>
+              <small>{filters.host || 'Todos'}</small>
+            </summary>
             <Select
               name="booking-host"
               label="Seleccionar anfitrión"
@@ -139,18 +244,20 @@ export default function Shop() {
               ]}
             />
           </details>
-          <Select
-            name="booking-sort"
-            label="Ordenar por"
-            value={filters.sort}
-            onChange={(value) => updateFilter('sort', value)}
-            options={[
-              { value: 'recommended', label: 'Recomendados' },
-              { value: 'price-asc', label: 'Precio: menor a mayor' },
-              { value: 'price-desc', label: 'Precio: mayor a menor' },
-              { value: 'title', label: 'Nombre' }
-            ]}
-          />
+          <div className="booking-sort-section">
+            <Select
+              name="booking-sort"
+              label="Ordenar por"
+              value={filters.sort}
+              onChange={(value) => updateFilter('sort', value)}
+              options={[
+                { value: 'recommended', label: 'Recomendados' },
+                { value: 'price-asc', label: 'Precio: menor a mayor' },
+                { value: 'price-desc', label: 'Precio: mayor a menor' },
+                { value: 'title', label: 'Nombre' }
+              ]}
+            />
+          </div>
         </aside>
 
         <div className="booking-catalog">

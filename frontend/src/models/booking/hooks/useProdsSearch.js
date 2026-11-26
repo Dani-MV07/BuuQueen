@@ -2,11 +2,20 @@ import { useEffect, useState } from 'react';
 import productService from '../services/productService';
 import useFilters from './useFilters';
 
-export default function useProdsSearch() {
+export default function useProdsSearch(initialFilters) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { filters, categories, locations, hosts, priceBounds, filteredProducts, updateFilter } = useFilters(products);
+  const {
+    filters,
+    categories,
+    locations,
+    hosts,
+    priceBounds,
+    filteredProducts,
+    updateFilter,
+    updateFilters
+  } = useFilters(products, initialFilters);
 
   useEffect(() => {
     let active = true;
@@ -27,5 +36,16 @@ export default function useProdsSearch() {
     };
   }, []);
 
-  return { products: filteredProducts, filters, categories, locations, hosts, priceBounds, updateFilter, loading, error };
+  return {
+    products: filteredProducts,
+    filters,
+    categories,
+    locations,
+    hosts,
+    priceBounds,
+    updateFilter,
+    updateFilters,
+    loading,
+    error
+  };
 }

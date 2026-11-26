@@ -8,16 +8,17 @@ function getStartingPrice(product) {
   return prices.length ? Math.min(...prices) : Number.POSITIVE_INFINITY;
 }
 
-export default function useFilters(products) {
-  const [filters, setFilters] = useState({
+export default function useFilters(products, initialFilters = {}) {
+  const [filters, setFilters] = useState(() => ({
     search: '',
     category: '',
     location: '',
     host: '',
     priceMin: null,
     priceMax: null,
-    sort: 'recommended'
-  });
+    sort: 'recommended',
+    ...initialFilters
+  }));
 
   const priceBounds = useMemo(() => {
     const prices = products
@@ -95,5 +96,12 @@ export default function useFilters(products) {
     setFilters((current) => ({ ...current, [name]: value }));
   }, []);
 
-  return { filters, categories, locations, hosts, priceBounds, filteredProducts, updateFilter };
+  const updateFilters = useCallback((nextFilters) => {
+    setFilters((current) => {
+      const hasChanges = Object.keys(nextFilters).some((key) => current[key] !== nextFilters[key]);
+      return hasChanges ? { ...current, ...nextFilters } : current;
+    });
+  }, []);
+
+  return { filters, categories, locations, hosts, priceBounds, filteredProducts, updateFilter, updateFilters };
 }

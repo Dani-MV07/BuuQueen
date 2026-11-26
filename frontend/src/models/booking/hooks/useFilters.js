@@ -9,11 +9,45 @@ function getStartingPrice(product) {
 }
 
 export default function useFilters(products) {
-  const [filters, setFilters] = useState({ search: '', category: '', sort: 'recommended' });
+  const [filters, setFilters] = useState({
+    search: '',
+    category: '',
+    location: '',
+    host: '',
+    priceMin: null,
+    priceMax: null,
+    sort: 'recommended'
+  });
+
+  const priceBounds = useMemo(() => {
+    const prices = products
+      .map(getStartingPrice)
+      .filter(Number.isFinite);
+    if (!prices.length) return { min: 0, max: 0 };
+    return {
+      min: Math.floor(Math.min(...prices)),
+      max: Math.ceil(Math.max(...prices))
+    };
+  }, [products]);
 
   const categories = useMemo(() => {
     const names = products
       .map((product) => product.category_id?.name)
+      .filter(Boolean);
+    return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'es'));
+  }, [products]);
+
+  const locations = useMemo(() => {
+    const names = products
+      .map((product) => product.location_id?.name
+        || [product.location_id?.city, product.location_id?.country].filter(Boolean).join(', '))
+      .filter(Boolean);
+    return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'es'));
+  }, [products]);
+
+  const hosts = useMemo(() => {
+    const names = products
+      .map((product) => product.host_id?.name)
       .filter(Boolean);
     return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'es'));
   }, [products]);
@@ -23,6 +57,14 @@ export default function useFilters(products) {
     const results = products.filter((product) => {
       if (product.isActive === false || product.status !== 'published') return false;
       if (filters.category && product.category_id?.name !== filters.category) return false;
+      const locationName = product.location_id?.name
+        || [product.location_id?.city, product.location_id?.country].filter(Boolean).join(', ');
+      if (filters.location && locationName !== filters.location) return false;
+      const hostName = product.host_id?.name;
+      if (filters.host && hostName !== filters.host) return false;
+      const startingPrice = getStartingPrice(product);
+      if (filters.priceMin !== null && startingPrice < filters.priceMin) return false;
+      if (filters.priceMax !== null && startingPrice > filters.priceMax) return false;
 
       const searchableText = [
         product.title,
@@ -30,7 +72,9 @@ export default function useFilters(products) {
         product.category_id?.name,
         product.location_id?.name,
         product.location_id?.city,
-        product.location_id?.country
+        product.location_id?.country,
+        product.host_id?.name,
+        product.host_id?.bio
       ].filter(Boolean).join(' ').toLocaleLowerCase('es');
       return !query || searchableText.includes(query);
     });
@@ -51,5 +95,5 @@ export default function useFilters(products) {
     setFilters((current) => ({ ...current, [name]: value }));
   }, []);
 
-  return { filters, categories, filteredProducts, updateFilter };
+  return { filters, categories, locations, hosts, priceBounds, filteredProducts, updateFilter };
 }

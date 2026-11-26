@@ -20,9 +20,16 @@ function toBookingProduct(accommodation) {
       slug: product.category_id.slug
     },
     location_id: product.location_id && {
+      _id: product.location_id._id,
       city: product.location_id.city,
       country: product.location_id.country,
       name: [product.location_id.city, product.location_id.country].filter(Boolean).join(', ')
+    },
+    host_id: product.host_id && {
+      _id: product.host_id._id,
+      name: product.host_id.user_id?.name,
+      slug: product.host_id.slug,
+      bio: product.host_id.bio
     },
     images: (product.images || [])
       .filter((image) => image.isActive !== false && image.status === 'active')
@@ -34,7 +41,15 @@ function toBookingProduct(accommodation) {
         && variant.status === 'available'
         && variant.stock > 0
       ))
-      .map(({ _id, price, capacity, description }) => ({ _id, price, capacity, description }))
+      .map(({ _id, price, capacity, description, stock, status, isActive }) => ({
+        _id,
+        price,
+        capacity,
+        description,
+        stock,
+        status,
+        isActive
+      }))
   };
 }
 

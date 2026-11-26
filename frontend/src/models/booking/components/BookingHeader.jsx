@@ -19,7 +19,7 @@ export default function BookingHeader() {
           <img className="booking-brand-icon" src="/buuqueen-icon.png" alt="" />
         </span>
         <span className="booking-brand-copy">
-          <strong>BuuQueen<i aria-hidden="true" /></strong>
+          <strong>BuuQueen</strong>
         </span>
       </NavLink>
       <nav className="booking-nav" aria-label="Navegación principal">

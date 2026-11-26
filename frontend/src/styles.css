@@ -3963,19 +3963,6 @@ textarea:focus {
   letter-spacing: -0.02em;
 }
 
-.booking-brand strong i {
-  width: 34px;
-  height: 2px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #feba02 0 45%, #003b95 45% 100%);
-  transform-origin: left;
-  transition: width 220ms ease;
-}
-
-.booking-brand:hover strong i {
-  width: 44px;
-}
-
 .booking-nav {
   position: relative;
   gap: 3px;
@@ -4166,37 +4153,6 @@ textarea:focus {
   text-shadow: 1px 1px 0 rgba(254, 186, 2, 0.18);
 }
 
-.booking-brand strong i {
-  display: block;
-  width: 32px;
-  height: 7px;
-  margin-bottom: 2px;
-  border-radius: 2px;
-  background: linear-gradient(135deg, #003b95 0 52%, #feba02 52% 100%);
-  box-shadow: 0 2px 5px rgba(0, 59, 149, 0.12);
-  transform: skew(-18deg);
-  transform-origin: left bottom;
-  transition: width 180ms ease, transform 180ms ease;
-}
-
-.booking-brand strong i::after {
-  display: block;
-  width: 58%;
-  height: 2px;
-  margin: 2px 0 0 3px;
-  border-radius: 999px;
-  background: #feba02;
-  content: "";
-  transform: rotate(-8deg);
-  transform-origin: left;
-  opacity: 0.9;
-}
-
-.booking-brand:hover strong i {
-  width: 40px;
-  transform: skew(-18deg) translateX(2px);
-}
-
 @media (max-width: 620px) {
   .booking-brand-copy {
     min-width: 118px;
@@ -4204,10 +4160,6 @@ textarea:focus {
 
   .booking-brand strong {
     font-size: 1.02rem;
-  }
-
-  .booking-brand strong i {
-    width: 27px;
   }
 }
 

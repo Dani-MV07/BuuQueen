@@ -8,6 +8,10 @@ function getStartingPrice(product) {
   return prices.length ? Math.min(...prices) : Number.POSITIVE_INFINITY;
 }
 
+function getHostName(product) {
+  return product.host_id?.name || product.host_id?.user_id?.name || '';
+}
+
 export default function useFilters(products, initialFilters = {}) {
   const [filters, setFilters] = useState(() => ({
     search: '',
@@ -56,7 +60,8 @@ export default function useFilters(products, initialFilters = {}) {
 
   const hosts = useMemo(() => {
     const names = products
-      .map((product) => product.host_id?.name)
+      .filter((product) => product.isActive !== false && product.status === 'published')
+      .map(getHostName)
       .filter(Boolean);
     return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'es'));
   }, [products]);
@@ -68,7 +73,7 @@ export default function useFilters(products, initialFilters = {}) {
       if (filters.category && product.category_id?.name !== filters.category) return false;
       if (filters.country && product.location_id?.country !== filters.country) return false;
       if (filters.city && product.location_id?.city !== filters.city) return false;
-      const hostName = product.host_id?.name;
+      const hostName = getHostName(product);
       if (filters.host && hostName !== filters.host) return false;
       const startingPrice = getStartingPrice(product);
       if (filters.priceMin !== null && startingPrice < filters.priceMin) return false;
@@ -81,7 +86,7 @@ export default function useFilters(products, initialFilters = {}) {
         product.location_id?.name,
         product.location_id?.city,
         product.location_id?.country,
-        product.host_id?.name,
+        hostName,
         product.host_id?.bio
       ].filter(Boolean).join(' ').toLocaleLowerCase('es');
       return !query || searchableText.includes(query);

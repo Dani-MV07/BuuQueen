@@ -9,6 +9,7 @@ import Skeleton from '../../../components/shared/Skeleton';
 import { useAuth } from '../../../auth/AuthContext';
 import { authApi } from '../../../services/apiService';
 import { profileAvatarSchema } from '../../profiles/features/profileSchema';
+import { useTheme } from '../../../theme/ThemeContext';
 
 const myProfileSchema = z.object({
   name: z.string().trim().min(1, 'El nombre es obligatorio.').max(160, 'Máximo 160 caracteres.'),
@@ -30,6 +31,7 @@ function getValues(user, profile) {
 
 export default function MyProfilePage() {
   const { updateMyProfile } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [values, setValues] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -82,6 +84,33 @@ export default function MyProfilePage() {
         <div className="editor-heading-copy"><p className="eyebrow">TU CUENTA</p><h1>Mi perfil</h1><p>Edita tus datos y la foto que verán otros usuarios.</p></div>
         <span className="editor-mode">Perfil personal</span>
       </header>
+      <section className="theme-preference-card" aria-labelledby="theme-preference-title">
+        <div className="theme-preference-heading">
+          <span className="theme-preference-icon" aria-hidden="true">{theme === 'dark' ? '☾' : '☀'}</span>
+          <div>
+            <h2 id="theme-preference-title">Apariencia</h2>
+            <p>Elige el modo visual de la aplicación para tu cuenta.</p>
+          </div>
+        </div>
+        <div className="theme-choice-group" role="group" aria-label="Tema de la aplicación">
+          <button
+            type="button"
+            className={`theme-choice${theme === 'light' ? ' is-selected' : ''}`}
+            aria-pressed={theme === 'light'}
+            onClick={() => setTheme('light')}
+          >
+            <span aria-hidden="true">☀</span> Modo claro
+          </button>
+          <button
+            type="button"
+            className={`theme-choice${theme === 'dark' ? ' is-selected' : ''}`}
+            aria-pressed={theme === 'dark'}
+            onClick={() => setTheme('dark')}
+          >
+            <span aria-hidden="true">☾</span> Modo oscuro
+          </button>
+        </div>
+      </section>
       {submitError && <div className="alert error" role="alert">{submitError}</div>}
       {saved && <div className="alert success" role="status">Tus cambios se han guardado correctamente.</div>}
       <form className="form-panel management-form" onSubmit={handleSubmit(save)} noValidate>

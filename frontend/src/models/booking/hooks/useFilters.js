@@ -12,7 +12,8 @@ export default function useFilters(products, initialFilters = {}) {
   const [filters, setFilters] = useState(() => ({
     search: '',
     category: '',
-    location: '',
+    country: '',
+    city: '',
     host: '',
     priceMin: null,
     priceMax: null,
@@ -38,13 +39,20 @@ export default function useFilters(products, initialFilters = {}) {
     return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'es'));
   }, [products]);
 
-  const locations = useMemo(() => {
+  const countries = useMemo(() => {
     const names = products
-      .map((product) => product.location_id?.name
-        || [product.location_id?.city, product.location_id?.country].filter(Boolean).join(', '))
+      .map((product) => product.location_id?.country)
       .filter(Boolean);
     return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'es'));
   }, [products]);
+
+  const cities = useMemo(() => {
+    const names = products
+      .filter((product) => !filters.country || product.location_id?.country === filters.country)
+      .map((product) => product.location_id?.city)
+      .filter(Boolean);
+    return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'es'));
+  }, [filters.country, products]);
 
   const hosts = useMemo(() => {
     const names = products
@@ -58,9 +66,8 @@ export default function useFilters(products, initialFilters = {}) {
     const results = products.filter((product) => {
       if (product.isActive === false || product.status !== 'published') return false;
       if (filters.category && product.category_id?.name !== filters.category) return false;
-      const locationName = product.location_id?.name
-        || [product.location_id?.city, product.location_id?.country].filter(Boolean).join(', ');
-      if (filters.location && locationName !== filters.location) return false;
+      if (filters.country && product.location_id?.country !== filters.country) return false;
+      if (filters.city && product.location_id?.city !== filters.city) return false;
       const hostName = product.host_id?.name;
       if (filters.host && hostName !== filters.host) return false;
       const startingPrice = getStartingPrice(product);
@@ -103,5 +110,5 @@ export default function useFilters(products, initialFilters = {}) {
     });
   }, []);
 
-  return { filters, categories, locations, hosts, priceBounds, filteredProducts, updateFilter, updateFilters };
+  return { filters, categories, countries, cities, hosts, priceBounds, filteredProducts, updateFilter, updateFilters };
 }

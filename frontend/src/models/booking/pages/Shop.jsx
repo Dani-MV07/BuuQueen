@@ -16,11 +16,14 @@ function getFiltersFromSearchParams(searchParams) {
     const price = Number(value);
     return Number.isFinite(price) ? price : null;
   };
+  const legacyLocation = searchParams.get('location') || '';
+  const [legacyCity, ...legacyCountry] = legacyLocation.split(',').map((part) => part.trim());
 
   return {
     search: searchParams.get('q') || '',
     category: searchParams.get('category') || '',
-    location: searchParams.get('location') || '',
+    country: searchParams.get('country') || legacyCountry.join(', '),
+    city: searchParams.get('city') || legacyCity || '',
     host: searchParams.get('host') || '',
     priceMin: getPrice('priceMin'),
     priceMax: getPrice('priceMax'),
@@ -35,7 +38,8 @@ export default function Shop() {
     products,
     filters,
     categories,
-    locations,
+    countries,
+    cities,
     hosts,
     priceBounds,
     updateFilter,
@@ -44,11 +48,19 @@ export default function Shop() {
     error
   } = useProdsSearch(initialFilters);
   const [page, setPage] = useState(1);
+  const [priceInputs, setPriceInputs] = useState({ min: '', max: '' });
   const syncingFromUrl = useRef(false);
 
   useEffect(() => {
+    setPriceInputs({
+      min: String(filters.priceMin ?? priceBounds.min),
+      max: String(filters.priceMax ?? priceBounds.max)
+    });
+  }, [filters.priceMin, filters.priceMax, priceBounds.min, priceBounds.max]);
+
+  useEffect(() => {
     setPage(1);
-  }, [filters.search, filters.category, filters.location, filters.host, filters.priceMin, filters.priceMax, filters.sort]);
+  }, [filters.search, filters.category, filters.country, filters.city, filters.host, filters.priceMin, filters.priceMax, filters.sort]);
 
   useEffect(() => {
     syncingFromUrl.current = true;
@@ -62,13 +74,14 @@ export default function Shop() {
     }
 
     const nextParams = new URLSearchParams(searchParams);
-    ['q', 'category', 'location', 'host', 'priceMin', 'priceMax', 'sort']
+    ['q', 'category', 'location', 'country', 'city', 'host', 'priceMin', 'priceMax', 'sort']
       .forEach((key) => nextParams.delete(key));
 
     const filtersToParams = [
       ['q', filters.search],
       ['category', filters.category],
-      ['location', filters.location],
+      ['country', filters.country],
+      ['city', filters.city],
       ['host', filters.host],
       ['priceMin', filters.priceMin],
       ['priceMax', filters.priceMax],
@@ -93,12 +106,32 @@ export default function Shop() {
   const activeFiltersCount = [
     filters.search,
     filters.category,
-    filters.location,
+    filters.country || filters.city,
     filters.host,
     filters.priceMin !== null,
     filters.priceMax !== null,
     filters.sort !== 'recommended'
   ].filter(Boolean).length;
+  const minPriceText = priceInputs.min || String(priceBounds.min);
+  const maxPriceText = priceInputs.max || String(priceBounds.max);
+
+  function commitPriceInput(bound) {
+    const rawValue = priceInputs[bound];
+    if (rawValue === '') {
+      updateFilter(bound === 'min' ? 'priceMin' : 'priceMax', null);
+      return;
+    }
+
+    const value = Number(rawValue);
+    if (!Number.isFinite(value)) return;
+
+    const boundedValue = Math.max(priceBounds.min, Math.min(value, priceBounds.max));
+    if (bound === 'min') {
+      updateFilter('priceMin', Math.min(boundedValue, filters.priceMax ?? priceBounds.max));
+      return;
+    }
+    updateFilter('priceMax', Math.max(boundedValue, filters.priceMin ?? priceBounds.min));
+  }
 
   return (
     <section className="booking-page">
@@ -126,7 +159,8 @@ export default function Shop() {
               onClick={() => {
                 updateFilter('search', '');
                 updateFilter('category', '');
-                updateFilter('location', '');
+                updateFilter('country', '');
+                updateFilter('city', '');
                 updateFilter('host', '');
                 updateFilter('priceMin', null);
                 updateFilter('priceMax', null);
@@ -149,12 +183,8 @@ export default function Shop() {
               <path d="m16 16 4.5 4.5" />
             </svg>
           </label>
-          <fieldset className="booking-price-filter">
-            <legend>Precio por noche</legend>
-            <div className="booking-price-values">
-              <span><small>Desde</small><strong>{filters.priceMin ?? priceBounds.min} €</strong></span>
-              <span><small>Hasta</small><strong>{filters.priceMax ?? priceBounds.max} €</strong></span>
-            </div>
+          <details className="booking-price-filter" open>
+            <summary>Precio</summary>
             <div className="booking-price-range">
               <div className="booking-price-rail" aria-hidden="true">
                 <span
@@ -195,7 +225,48 @@ export default function Shop() {
                 aria-label="Precio máximo"
               />
             </div>
-          </fieldset>
+            <div className="booking-price-values">
+              <label className="booking-price-input">
+                <span className="visually-hidden">Precio mínimo en euros</span>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={priceBounds.min}
+                  max={filters.priceMax ?? priceBounds.max}
+                  step="1"
+                  value={priceInputs.min}
+                  style={{ width: `${Math.max(minPriceText.length, 2)}ch` }}
+                  onChange={(event) => setPriceInputs((current) => ({ ...current, min: event.target.value }))}
+                  onBlur={() => commitPriceInput('min')}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') event.currentTarget.blur();
+                  }}
+                  aria-label="Precio mínimo"
+                />
+                <span aria-hidden="true">€</span>
+              </label>
+              <span className="booking-price-separator" aria-hidden="true">–</span>
+              <label className="booking-price-input">
+                <span className="visually-hidden">Precio máximo en euros</span>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={filters.priceMin ?? priceBounds.min}
+                  max={priceBounds.max}
+                  step="1"
+                  value={priceInputs.max}
+                  style={{ width: `${Math.max(maxPriceText.length, 2)}ch` }}
+                  onChange={(event) => setPriceInputs((current) => ({ ...current, max: event.target.value }))}
+                  onBlur={() => commitPriceInput('max')}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') event.currentTarget.blur();
+                  }}
+                  aria-label="Precio máximo"
+                />
+                <span aria-hidden="true">€</span>
+              </label>
+            </div>
+          </details>
           <details className="booking-filter-section" open>
             <summary>
               <span>Categoría</span>
@@ -215,18 +286,31 @@ export default function Shop() {
           <details className="booking-filter-section">
             <summary>
               <span>Ubicación</span>
-              <small>{filters.location || 'Todas'}</small>
+              <small>{filters.city || filters.country || 'Todas'}</small>
             </summary>
-            <Select
-              name="booking-location"
-              label="Seleccionar ubicación"
-              value={filters.location}
-              onChange={(value) => updateFilter('location', value)}
-              options={[
-                { value: '', label: 'Todas las ubicaciones' },
-                ...locations.map((location) => ({ value: location, label: location }))
-              ]}
-            />
+            <div className="booking-location-fields">
+              <Select
+                name="booking-country"
+                label="País"
+                value={filters.country}
+                onChange={(value) => updateFilters({ country: value, city: '' })}
+                options={[
+                  { value: '', label: 'Todos los países' },
+                  ...countries.map((country) => ({ value: country, label: country }))
+                ]}
+              />
+              <Select
+                name="booking-city"
+                label="Ciudad"
+                value={filters.city}
+                disabled={!filters.country}
+                onChange={(value) => updateFilter('city', value)}
+                options={[
+                  { value: '', label: filters.country ? 'Todas las ciudades' : 'Elige un país primero' },
+                  ...cities.map((city) => ({ value: city, label: city }))
+                ]}
+              />
+            </div>
           </details>
           <details className="booking-filter-section">
             <summary>

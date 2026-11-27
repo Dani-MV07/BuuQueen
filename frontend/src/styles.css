@@ -5594,10 +5594,10 @@ html[data-theme="dark"] .booking-location-fields .booking-select select:disabled
 
 /* Booking dark mode palette */
 html[data-theme="dark"] {
-  --bg-base: #0F1115;
-  --surface-1: #181B20;
-  --surface-2: #22262E;
-  --surface-interactive: #2A2F3A;
+  --bg-base: #181B20;
+  --surface-1: #22262E;
+  --surface-2: #2A2F3A;
+  --surface-interactive: #313131;
   --text-primary: #F3F4F6;
   --text-secondary: #9CA3AF;
   --text-muted: #6B7280;
@@ -5755,7 +5755,7 @@ html[data-theme="dark"] .booking-price-range input::-moz-range-thumb {
 
 html[data-theme="dark"] .booking-hero {
   background:
-    linear-gradient(95deg, rgba(15, 17, 21, 0.97), rgba(24, 27, 32, 0.72)),
+    linear-gradient(95deg, rgba(34, 38, 46, 0.95), rgba(49, 49, 49, 0.72)),
     url('/images/travel-hero.jpg') center 54% / cover no-repeat;
 }
 
@@ -5929,4 +5929,213 @@ html[data-theme="dark"] .booking-toolbar .booking-select select {
 html[data-theme="dark"] .booking-toolbar .booking-inline-search input:focus,
 html[data-theme="dark"] .booking-toolbar .booking-select select:focus {
   background: var(--surface-2);
+}
+
+/* Keep the price range transparent over its own dark track. */
+html[data-theme="dark"] .booking-price-range input,
+html[data-theme="dark"] .booking-price-range input::-webkit-slider-runnable-track,
+html[data-theme="dark"] .booking-price-range input::-moz-range-track {
+  background: transparent;
+}
+
+html[data-theme="dark"] .booking-price-rail {
+  background: #2A2F3A;
+}
+
+html[data-theme="dark"] .booking-price-rail span {
+  background: #3B82F6;
+}
+
+html[data-theme="dark"] .booking-price-range input::-webkit-slider-thumb,
+html[data-theme="dark"] .booking-price-range input::-moz-range-thumb {
+  border-color: #F3F4F6;
+  background: #3B82F6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.42), 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+html[data-theme="dark"] .booking-price-range input:hover::-webkit-slider-thumb,
+html[data-theme="dark"] .booking-price-range input:hover::-moz-range-thumb {
+  border-color: #FFFFFF;
+  background: #2563EB;
+}
+
+/* Final thumb color: white in dark mode and light mode. */
+html[data-theme="dark"] .booking-price-range input::-webkit-slider-thumb,
+html[data-theme="dark"] .booking-price-range input::-moz-range-thumb,
+html:not([data-theme="dark"]) .booking-price-range input::-webkit-slider-thumb,
+html:not([data-theme="dark"]) .booking-price-range input::-moz-range-thumb {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+.booking-price-slider-min,
+.booking-price-slider-max {
+  accent-color: #FFFFFF !important;
+  color-scheme: light !important;
+}
+
+.booking-price-slider-min::-webkit-slider-thumb,
+.booking-price-slider-max::-webkit-slider-thumb,
+.booking-price-slider-min::-moz-range-thumb,
+.booking-price-slider-max::-moz-range-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  border-color: #3B82F6 !important;
+}
+
+/* Browser independent white slider thumbs. */
+.booking-price-range input.booking-price-slider-min,
+.booking-price-range input.booking-price-slider-max {
+  opacity: 0;
+}
+
+.booking-price-slider-thumb {
+  position: absolute;
+  z-index: 4;
+  top: 4px;
+  width: 24px;
+  height: 24px;
+  box-sizing: border-box;
+  border: 1px solid #3B82F6;
+  border-radius: 4px;
+  background: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0, 35, 85, 0.16);
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+/* Price fields: one full light-gray surface, with plain numbers on top. */
+html:not([data-theme="dark"]) .booking-price-input,
+html[data-theme="dark"] .booking-price-input {
+  border-color: #D1D5DB !important;
+  background: #D1D5DB !important;
+}
+
+html:not([data-theme="dark"]) .booking-price-input input,
+html[data-theme="dark"] .booking-price-input input {
+  background: transparent !important;
+  color: #1F2937 !important;
+}
+
+html:not([data-theme="dark"]) .booking-price-input > span:last-child,
+html[data-theme="dark"] .booking-price-input > span:last-child {
+  color: #4B5563 !important;
+}
+
+html:not([data-theme="dark"]) .booking-price-range input::-webkit-slider-thumb,
+html[data-theme="dark"] .booking-price-range input::-webkit-slider-thumb,
+html:not([data-theme="dark"]) .booking-price-range input::-moz-range-thumb,
+html[data-theme="dark"] .booking-price-range input::-moz-range-thumb {
+  -webkit-appearance: none !important;
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+html:not([data-theme="dark"]) .booking-price-range input,
+html[data-theme="dark"] .booking-price-range input {
+  color-scheme: light;
+}
+
+/* The price slider uses one fixed visual treatment in both themes. */
+html:not([data-theme="dark"]) .booking-price-range input,
+html[data-theme="dark"] .booking-price-range input {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: transparent !important;
+}
+
+html:not([data-theme="dark"]) .booking-price-range input::-webkit-slider-runnable-track,
+html[data-theme="dark"] .booking-price-range input::-webkit-slider-runnable-track,
+html:not([data-theme="dark"]) .booking-price-range input::-moz-range-track,
+html[data-theme="dark"] .booking-price-range input::-moz-range-track {
+  background: transparent !important;
+}
+
+html:not([data-theme="dark"]) .booking-price-rail,
+html[data-theme="dark"] .booking-price-rail {
+  background: #D1D5DB !important;
+}
+
+html:not([data-theme="dark"]) .booking-price-rail span,
+html[data-theme="dark"] .booking-price-rail span {
+  background: #3B82F6 !important;
+}
+
+html:not([data-theme="dark"]) .booking-price-range input::-webkit-slider-thumb,
+html[data-theme="dark"] .booking-price-range input::-webkit-slider-thumb,
+html:not([data-theme="dark"]) .booking-price-range input::-moz-range-thumb,
+html[data-theme="dark"] .booking-price-range input::-moz-range-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  border: 1px solid #D1D5DB !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 1px 3px rgba(0, 35, 85, 0.16) !important;
+}
+
+html:not([data-theme="dark"]) .booking-price-range input:hover::-webkit-slider-thumb,
+html[data-theme="dark"] .booking-price-range input:hover::-webkit-slider-thumb,
+html:not([data-theme="dark"]) .booking-price-range input:hover::-moz-range-thumb,
+html[data-theme="dark"] .booking-price-range input:hover::-moz-range-thumb {
+  border-color: #3B82F6 !important;
+  background: #FFFFFF !important;
+}
+
+/* Shared price slider palette in light and dark themes. */
+html:not([data-theme="dark"]) .booking-price-rail,
+html[data-theme="dark"] .booking-price-rail {
+  background: #9CA3AF;
+}
+
+html:not([data-theme="dark"]) .booking-price-rail span,
+html[data-theme="dark"] .booking-price-rail span {
+  background: #3B82F6;
+}
+
+html:not([data-theme="dark"]) .booking-price-range input::-webkit-slider-thumb,
+html:not([data-theme="dark"]) .booking-price-range input::-moz-range-thumb,
+html[data-theme="dark"] .booking-price-range input::-webkit-slider-thumb,
+html[data-theme="dark"] .booking-price-range input::-moz-range-thumb {
+  border-color: #F3F4F6;
+  background: #3B82F6;
+}
+
+html:not([data-theme="dark"]) .booking-price-range input:hover::-webkit-slider-thumb,
+html:not([data-theme="dark"]) .booking-price-range input:hover::-moz-range-thumb,
+html[data-theme="dark"] .booking-price-range input:hover::-webkit-slider-thumb,
+html[data-theme="dark"] .booking-price-range input:hover::-moz-range-thumb {
+  border-color: #FFFFFF;
+  background: #2563EB;
+}
+
+/* Keep the slider squares white after theme-specific hover rules. */
+html[data-theme="dark"] .booking-price-range input::-webkit-slider-thumb,
+html[data-theme="dark"] .booking-price-range input::-moz-range-thumb,
+html:not([data-theme="dark"]) .booking-price-range input::-webkit-slider-thumb,
+html:not([data-theme="dark"]) .booking-price-range input::-moz-range-thumb {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+.booking-price-slider-min,
+.booking-price-slider-max {
+  accent-color: #FFFFFF !important;
+  color-scheme: light !important;
+}
+
+.booking-price-slider-min::-webkit-slider-thumb,
+.booking-price-slider-max::-webkit-slider-thumb,
+.booking-price-slider-min::-moz-range-thumb,
+.booking-price-slider-max::-moz-range-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  border-color: #3B82F6 !important;
 }

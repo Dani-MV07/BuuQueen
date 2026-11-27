@@ -224,6 +224,24 @@ export default function Shop() {
                 }}
                 aria-label="Precio máximo"
               />
+              <span
+                className="booking-price-slider-thumb booking-price-slider-thumb-min"
+                style={{
+                  left: `${priceBounds.max > priceBounds.min
+                    ? ((filters.priceMin ?? priceBounds.min) - priceBounds.min) / (priceBounds.max - priceBounds.min) * 100
+                    : 0}%`
+                }}
+                aria-hidden="true"
+              />
+              <span
+                className="booking-price-slider-thumb booking-price-slider-thumb-max"
+                style={{
+                  left: `${priceBounds.max > priceBounds.min
+                    ? ((filters.priceMax ?? priceBounds.max) - priceBounds.min) / (priceBounds.max - priceBounds.min) * 100
+                    : 100}%`
+                }}
+                aria-hidden="true"
+              />
             </div>
             <div className="booking-price-values">
               <label className="booking-price-input">

@@ -5471,6 +5471,7 @@ html[data-theme="dark"] .booking-location-fields .booking-select select:disabled
   width: 24px;
   height: 24px;
   margin-top: -12px;
+  transform: translateY(-4px);
   border: 1px solid var(--border-soft);
   border-radius: 4px;
   appearance: none;
@@ -5493,7 +5494,7 @@ html[data-theme="dark"] .booking-location-fields .booking-select select:disabled
   box-sizing: border-box;
   width: 24px;
   height: 24px;
-  transform: translateY(-2px);
+  transform: translateY(-6px);
   border: 1px solid var(--border-soft);
   border-radius: 4px;
   background: var(--paper);

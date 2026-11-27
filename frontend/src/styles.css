@@ -5591,3 +5591,342 @@ html[data-theme="dark"] .booking-location-fields .booking-select select:disabled
   border-color: var(--teal);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 14%, transparent);
 }
+
+/* Booking dark mode palette */
+html[data-theme="dark"] {
+  --bg-base: #0F1115;
+  --surface-1: #181B20;
+  --surface-2: #22262E;
+  --surface-interactive: #2A2F3A;
+  --text-primary: #F3F4F6;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  --color-primary: #3B82F6;
+  --color-primary-hover: #2563EB;
+  --color-accent: #F59E0B;
+  --status-success: #10B981;
+  --status-success-bg: rgba(16, 185, 129, 0.15);
+  --status-warning: #F97316;
+  --status-warning-bg: rgba(249, 115, 22, 0.15);
+  --status-error: #EF4444;
+  --status-error-bg: rgba(239, 68, 68, 0.15);
+  --calendar-range-bg: rgba(59, 130, 246, 0.20);
+  --border-subtle: #272B33;
+  --border-focus: #3B82F6;
+  --ink: var(--text-primary);
+  --muted: var(--text-secondary);
+  --teal: var(--color-primary);
+  --teal-dark: var(--color-primary-hover);
+  --paper: var(--surface-1);
+  --line: var(--border-subtle);
+  --sand: var(--surface-2);
+  --surface-soft: var(--surface-2);
+  --surface-blue: var(--surface-2);
+  --surface-blue-strong: var(--surface-interactive);
+  --border-soft: var(--border-subtle);
+}
+
+html[data-theme="dark"],
+html[data-theme="dark"] body,
+html[data-theme="dark"] .booking-shell,
+html[data-theme="dark"] .admin-application {
+  background: var(--bg-base);
+  color: var(--text-primary);
+}
+
+html[data-theme="dark"] .booking-header,
+html[data-theme="dark"] .booking-nav,
+html[data-theme="dark"] .booking-account,
+html[data-theme="dark"] .booking-toolbar,
+html[data-theme="dark"] .booking-product-card,
+html[data-theme="dark"] .booking-catalog-card,
+html[data-theme="dark"] .booking-property-info div,
+html[data-theme="dark"] .booking-availability,
+html[data-theme="dark"] .booking-variant,
+html[data-theme="dark"] .booking-date-picker,
+html[data-theme="dark"] .booking-host-profile,
+html[data-theme="dark"] .booking-empty,
+html[data-theme="dark"] .dashboard-card,
+html[data-theme="dark"] .form-panel,
+html[data-theme="dark"] .accommodation-form,
+html[data-theme="dark"] .table-scroll,
+html[data-theme="dark"] .image-url-card,
+html[data-theme="dark"] .image-url-removed-item,
+html[data-theme="dark"] .login-panel,
+html[data-theme="dark"] .theme-preference-card {
+  background: var(--surface-1);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+html[data-theme="dark"] .booking-nav a.active:not(.booking-dashboard-link),
+html[data-theme="dark"] .booking-nav a:hover:not(.booking-dashboard-link),
+html[data-theme="dark"] .booking-price-values > span,
+html[data-theme="dark"] .booking-filter-section summary::after,
+html[data-theme="dark"] .theme-choice-group,
+html[data-theme="dark"] .booking-back-link,
+html[data-theme="dark"] .booking-pagination button,
+html[data-theme="dark"] .booking-text-link,
+html[data-theme="dark"] .booking-carousel,
+html[data-theme="dark"] .booking-carousel-empty,
+html[data-theme="dark"] .booking-carousel-empty img {
+  background: var(--surface-2);
+}
+
+html[data-theme="dark"] .booking-inline-search input,
+html[data-theme="dark"] .booking-select select,
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+  background: var(--surface-interactive);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: var(--text-muted);
+}
+
+html[data-theme="dark"] .booking-toolbar .booking-inline-search input:focus,
+html[data-theme="dark"] .booking-toolbar .booking-select select:focus,
+html[data-theme="dark"] input:focus,
+html[data-theme="dark"] select:focus,
+html[data-theme="dark"] textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+html[data-theme="dark"] .booking-product-description,
+html[data-theme="dark"] .booking-details-copy > p:not(.eyebrow),
+html[data-theme="dark"] .booking-host-profile p,
+html[data-theme="dark"] .booking-property-info dd + dd,
+html[data-theme="dark"] .booking-filter-section summary,
+html[data-theme="dark"] .booking-price-filter legend,
+html[data-theme="dark"] .booking-variant-total,
+html[data-theme="dark"] .booking-results-count,
+html[data-theme="dark"] .booking-page-heading > p:last-child,
+html[data-theme="dark"] .dashboard-subtitle,
+html[data-theme="dark"] .form-section-heading p,
+html[data-theme="dark"] .field-hint,
+html[data-theme="dark"] .table-detail,
+html[data-theme="dark"] .accommodations-table td,
+html[data-theme="dark"] .form-grid label span,
+html[data-theme="dark"] .form-description > span,
+html[data-theme="dark"] .availability-field > span,
+html[data-theme="dark"] .management-status-field,
+html[data-theme="dark"] .image-url-input {
+  color: var(--text-secondary);
+}
+
+html[data-theme="dark"] .booking-product-meta,
+html[data-theme="dark"] .booking-product-footer,
+html[data-theme="dark"] .booking-variant-action strong,
+html[data-theme="dark"] .booking-back-link,
+html[data-theme="dark"] .booking-text-link,
+html[data-theme="dark"] .booking-product-link {
+  color: var(--color-primary);
+}
+
+html[data-theme="dark"] .booking-nav a.booking-dashboard-link {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--bg-base);
+}
+
+html[data-theme="dark"] .booking-reservation-selection,
+html[data-theme="dark"] .booking-catalog-image,
+html[data-theme="dark"] .booking-product-image,
+html[data-theme="dark"] .booking-availability li,
+html[data-theme="dark"] .accommodations-table tbody tr:hover,
+html[data-theme="dark"] .theme-choice.is-selected {
+  background: var(--surface-interactive);
+}
+
+html[data-theme="dark"] .booking-price-rail {
+  background: var(--surface-interactive);
+}
+
+html[data-theme="dark"] .booking-price-rail span,
+html[data-theme="dark"] .booking-price-range input::-webkit-slider-thumb,
+html[data-theme="dark"] .booking-price-range input::-moz-range-thumb {
+  background: var(--color-primary);
+}
+
+html[data-theme="dark"] .booking-hero {
+  background:
+    linear-gradient(95deg, rgba(15, 17, 21, 0.97), rgba(24, 27, 32, 0.72)),
+    url('/images/travel-hero.jpg') center 54% / cover no-repeat;
+}
+
+html[data-theme="dark"] .booking-site-footer {
+  background: var(--bg-base);
+  border-color: var(--border-subtle);
+}
+
+html[data-theme="dark"] .alert.success {
+  border-color: var(--status-success);
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+html[data-theme="dark"] .alert.error {
+  border-color: var(--status-error);
+  background: var(--status-error-bg);
+  color: var(--status-error);
+}
+
+/* Catalog filters */
+.booking-toolbar {
+  gap: 16px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  background: var(--paper);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.booking-filter-heading {
+  align-items: start;
+  gap: 12px;
+  padding: 0 0 16px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.booking-filter-title > span {
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+}
+
+.booking-filter-title h2 {
+  color: var(--ink);
+  font-size: 1.25rem;
+  letter-spacing: -0.025em;
+}
+
+.booking-filter-count {
+  width: 28px;
+  height: 28px;
+  border: 1px solid color-mix(in srgb, var(--teal) 28%, var(--border-soft));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--teal) 12%, var(--paper));
+  color: var(--teal);
+  font-variant-numeric: tabular-nums;
+}
+
+.booking-filter-reset {
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  padding: 7px 10px;
+  transition: background 300ms ease, border-color 300ms ease, color 300ms ease, transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.booking-filter-reset:hover {
+  border-color: var(--teal);
+  background: color-mix(in srgb, var(--teal) 10%, var(--paper));
+  color: var(--teal);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.booking-filter-reset:active {
+  transform: scale(0.98);
+}
+
+.booking-toolbar .booking-inline-search input {
+  min-height: 48px;
+  border-color: var(--border-soft);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  color: var(--ink);
+  font-size: 0.875rem;
+  padding-inline: 14px 42px;
+}
+
+.booking-toolbar .booking-inline-search input:focus {
+  background: var(--paper);
+}
+
+.booking-filter-search-icon {
+  right: 14px;
+  stroke: var(--muted);
+}
+
+.booking-filter-section {
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  padding: 4px 12px 12px;
+}
+
+.booking-filter-section summary {
+  min-height: 40px;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.booking-filter-section summary small {
+  max-width: 110px;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.booking-filter-section summary::after {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--border-soft);
+  background: var(--paper);
+  color: var(--muted);
+}
+
+.booking-filter-section[open] summary::after {
+  border-color: color-mix(in srgb, var(--teal) 36%, var(--border-soft));
+  background: color-mix(in srgb, var(--teal) 12%, var(--paper));
+  color: var(--teal);
+}
+
+.booking-filter-section .booking-select,
+.booking-location-fields .booking-select {
+  gap: 6px;
+}
+
+.booking-toolbar .booking-select > span,
+.booking-location-fields .booking-select > span {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.booking-toolbar .booking-select select {
+  min-height: 44px;
+  border-color: var(--border-soft);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  padding-inline: 12px 34px;
+}
+
+.booking-toolbar .booking-select select:hover {
+  border-color: color-mix(in srgb, var(--teal) 48%, var(--border-soft));
+}
+
+.booking-sort-section {
+  border-top: 1px solid var(--border-soft);
+  padding-top: 16px;
+}
+
+html[data-theme="dark"] .booking-toolbar .booking-inline-search input,
+html[data-theme="dark"] .booking-toolbar .booking-select select {
+  background: var(--surface-interactive);
+}
+
+html[data-theme="dark"] .booking-toolbar .booking-inline-search input:focus,
+html[data-theme="dark"] .booking-toolbar .booking-select select:focus {
+  background: var(--surface-2);
+}
